@@ -1,0 +1,12 @@
+#id-article-container {
+    width: 800px;
+    margin: 0 auto;
+}
+
+#id-article-title {
+    text-align: center;
+}
+
+body, div {
+    outline: 1px dashed red;
+}

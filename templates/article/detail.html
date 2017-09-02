@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>半夜集 - {{ m.title }}</title>
+    <!-- css file -->
+    <link rel="stylesheet" href="../../static/article/css/detail.css">
+</head>
+<body>
+<nav id="id-nav-head">
+
+</nav>
+<div id="id-article-container">
+    <h2 id="id-article-title">
+        {{ m.title }}
+    </h2>
+    <span id="id-article-ct">
+        {{ m.ct }}
+    </span>
+    <span>
+        {{ m.tags }}
+    </span>
+    <span id="id-article-ut">
+        {{ m.ut }}
+    </span>
+    <div>
+        {{ m.overview }}
+    </div>
+    <div id="id-article-content">
+        {{ m.html() }}
+    </div>
+</div>
+<!-- js file -->
+<script src="//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="../../static/js/iv.js"></script>
+</body>
+</html>

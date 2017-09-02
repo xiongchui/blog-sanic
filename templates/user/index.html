@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>半夜集 - 用户页</title>
+</head>
+<body>
+<div id="id-action-container">
+    <div class="user-container">
+        <input class="login-username" type="text" name="username">
+        <input class="login-password" type="text" name="password">
+        <button class="user-action" type="submit" data-action="register">register</button>
+    </div>
+    <div class="user-container">
+        <input class="register-username" type="text" name="username">
+        <input class="register-password" type="password" name="password">
+        <button class="user-action" type="submit" data-action="login">login</button>
+    </div>
+</div>
+
+<script>
+    const _e = sel => document.querySelector(sel)
+
+    const log = console.log.bind(console)
+
+    Element.prototype._e = Element.prototype.querySelector
+
+    const api = {}
+
+    api.ajax = request => {
+        var req = {
+            url: request.url,
+            // data 传对象
+            data: JSON.stringify(request.data) || null,
+            method: request.method || 'POST',
+            header: request.header || {},
+            contentType: request.contentType || 'application/json',
+            callback: request.callback
+        }
+        var r = new XMLHttpRequest()
+        var promise = new Promise((resolve, reject) => {
+            r.open(req.method, req.url, true)
+            r.setRequestHeader('Content-Type', req.contentType)
+            // setHeader
+            Object.keys(req.header).forEach(key => {
+                r.setRequestHeader(key, req.header[key])
+            })
+            r.onreadystatechange = function () {
+                if (r.readyState === 4) {
+                    let res = r.response
+                    // 回调函数
+                    if (typeof req.callback === 'function') {
+                        req.callback(res)
+                    }
+                    // Promise 成功
+                    resolve(res)
+                }
+            }
+            r.onerror = function (err) {
+                reject(err)
+            }
+            if (req.method.toUpperCase() === 'GET') {
+                r.send()
+            } else {
+                // POST
+                r.send(req.data)
+            }
+        })
+        return promise
+    }
+
+    api.login = form => {
+        var req = {
+            url: '/users/login',
+            data: form,
+        }
+        api.ajax(req).then(body => {
+            var r = JSON.parse(body)
+
+            if (r.success) {
+                href = `/users/detail/${r.data.id}`
+            } else {
+                alert(`${r.msgs.join('')}`)
+            }
+        })
+    }
+
+    api.register = form => {
+        var req = {
+            url: '/users/register',
+            data: form,
+        }
+        api.ajax(req).then(body => {
+            var r = JSON.parse(body)
+            if (r.success) {
+                location.href = `/users/detail`
+            } else {
+                alert(`${r.msgs.join('')}`)
+            }
+        })
+    }
+
+    var actionLogin = event => {
+        var self = event.target
+        var container = self.closest('.user-container')
+        var username = container._e('.login-username').value
+        var password = container._e('.login-password').value
+        var form = {
+            username,
+            password,
+        }
+        api.login(form)
+    }
+
+    var actionRegister = event => {
+        var self = event.target
+        var container = self.closest('.user-container')
+        var username = container._e('.login-username').value
+        var password = container._e('.login-password').value
+        var form = {
+            username,
+            password,
+        }
+        api.register(form)
+    }
+
+    const bindEventsClick = () => {
+        var actions = {
+            login: actionLogin,
+            register: actionRegister,
+        }
+        var container = _e('#id-action-container')
+        container.addEventListener('click', event => {
+            var self = event.target
+            var actionName = self.dataset.action
+            var action = actions[actionName]
+            if (action !== undefined) {
+                action(event)
+            }
+        })
+    }
+
+    const __main = () => {
+        bindEventsClick()
+    }
+
+    __main()
+
+</script>
+</body>
+</html>

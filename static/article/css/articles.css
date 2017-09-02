@@ -1,0 +1,9 @@
+#id-articles-container {
+    margin: 0 auto;
+    width: 800px;
+    height: 100%;
+}
+
+.article-cell {
+    width: 100%;
+}
