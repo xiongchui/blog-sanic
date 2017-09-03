@@ -19,9 +19,9 @@ def current_user(request):
     if s != '':
         r = session.cipher_to_dict(s)
         u = User.find_one(id=r['id'])
-        return u
-    else:
-        return None
+        if u.password == r['password']:
+            return u
+    return None
 
 
 def login_required(router_func):

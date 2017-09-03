@@ -1,12 +1,13 @@
 import json
 from models.session import session
-from sanic import Blueprint
+from sanic import Blueprint, Sanic
 from models.user import User
-from . import template, current_user
+from . import template, current_user, login_required
 from sanic.response import json as jsonResponse
 from sanic.response import html as htmlResponse
 from sanic.response import redirect
 
+app = Sanic(__name__)
 bp = Blueprint('user', url_prefix='/users')
 
 
@@ -20,6 +21,7 @@ async def register(request):
             data=u.json(),
         ))
         res.cookies['sessionid'] = session.dict_to_cipher(u.json())
+        res.cookies['sessionid']['httponly'] = True
     else:
         res = jsonResponse(dict(
             sucess=False,
@@ -30,8 +32,7 @@ async def register(request):
 
 @bp.route('/login', methods=['POST'])
 async def login(request):
-    s = request.json
-    d = json.loads(s)
+    d = request.json
     u = User.login(d)
     if u is not None:
         res = jsonResponse(dict(
@@ -39,6 +40,7 @@ async def login(request):
             data=u.json(),
         ))
         res.cookies['sessionid'] = session.dict_to_cipher(u.json())
+        res.cookies['sessionid']['httponly'] = True
     else:
         res = jsonResponse(dict(
             sucess=False,
@@ -53,9 +55,15 @@ async def index(request):
 
 
 @bp.route('/detail', methods=['GET'])
+@login_required
 async def detail(request):
     u = current_user(request)
-    if u is None:
-        return redirect('/users')
-    else:
-        return htmlResponse(template('user/detail.html'))
+    return htmlResponse(template('user/detail.html'))
+
+
+@bp.route('/logout', methods=['GET'])
+@login_required
+async def detail(request):
+    res = redirect('/articles')
+    del res.cookies['sessionid']
+    return res

@@ -78,7 +78,7 @@ var loadArticle = () => {
             insertArticle(r)
             loadComment(r)
         } else {
-            alert('failed')
+            alert(`${r.msgs.join('')}`)
         }
     })
 
@@ -131,7 +131,7 @@ var bindEventAddComment = () => {
                 var t = templateComment(data)
                 insertComment(t)
             } else {
-                alert('failed')
+                alert(`${r.msgs.join('')}`)
             }
         })
     })

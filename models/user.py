@@ -21,7 +21,6 @@ class User(Mongua):
             '_id',
             'deleted',
             'type',
-            'password',
             'mailbox',
         ]
         return b

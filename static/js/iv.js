@@ -20,9 +20,13 @@ const _e = sel => document.querySelector(sel)
 
 const _es = sel => document.querySelectorAll(sel)
 
-Element.prototype._e = sel => document.querySelector(sel)
+Element.prototype._e = function (sel) {
+    return this.querySelector(sel)
+}
 
-Element.prototype._es = sel => document.querySelectorAll(sel)
+Element.prototype._es = function (sel) {
+    return this.querySelectorAll(sel)
+}
 
 Element.prototype.on = Element.prototype.addEventListener
 
