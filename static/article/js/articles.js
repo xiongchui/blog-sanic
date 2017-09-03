@@ -29,7 +29,7 @@ var nunjucksEnvironment = () => {
 // 自动获取数据并生成页面
 var loadArticles = () => {
     var env = nunjucksEnvironment()
-    var self = e('#id-articles-container')
+    var self = _e('#id-articles-container')
     log(self)
     const source = self.dataset.source
     const template = eval(self.dataset.template)()

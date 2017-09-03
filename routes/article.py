@@ -14,8 +14,7 @@ async def index(request):
 
 @bp.route('/<id:int>', methods=['GET'])
 async def detail(request, id):
-    m = Model.find_one(id=id)
-    return htmlResponse(template('article/detail.html', m=m))
+    return htmlResponse(template('article/detail.html', id=id))
 
 
 @bp.route('/new', methods=['GET'])

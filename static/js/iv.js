@@ -16,13 +16,13 @@ Date.prototype.format = function () {
 const log = console.log.bind(console, new Date().format())
 
 // 简化常用函数
-const e = sel => document.querySelector(sel)
+const _e = sel => document.querySelector(sel)
 
-const es = sel => document.querySelectorAll(sel)
+const _es = sel => document.querySelectorAll(sel)
 
-Element.prototype.e = sel => document.querySelector(sel)
+Element.prototype._e = sel => document.querySelector(sel)
 
-Element.prototype.es = sel => document.querySelectorAll(sel)
+Element.prototype._es = sel => document.querySelectorAll(sel)
 
 Element.prototype.on = Element.prototype.addEventListener
 

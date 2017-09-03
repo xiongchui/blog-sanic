@@ -17,20 +17,20 @@ const htmlFromMarkdown = (string) => {
 }
 
 const bindEventShow = () => {
-    d = e('#id-editor-content')
+    d = _e('#id-editor-content')
     d.on('keyup', () => {
         var s = d.value
         var t = htmlFromMarkdown(s)
-        e('#id-editor-show').innerHTML = t
+        _e('#id-editor-show').innerHTML = t
     })
 }
 
 const bindEventClickSubmit = () => {
-    e('#id-btn-submit').on('click', () => {
-        var overview = e('#id-editor-overview').value
-        var content = e('#id-editor-content').value
-        var title = e('#id-input-title').value
-        var tags = e('#id-input-tags').value.split(' ')
+    _e('#id-btn-submit').on('click', () => {
+        var overview = _e('#id-editor-overview').value
+        var content = _e('#id-editor-content').value
+        var title = _e('#id-input-title').value
+        var tags = _e('#id-input-tags').value.split(' ')
         var form = {
             overview: overview,
             content: content,

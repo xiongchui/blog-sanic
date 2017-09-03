@@ -12,9 +12,18 @@ async def bp_root(request):
 
 
 @bp.route('/articles', methods=['GET'])
-async def newBlog(request):
+async def all(request):
     articles = Article.all()
     return jsonResponse(articles)
+
+@bp.route('/articles/<id:int>', methods=['GET'])
+async def detail(request, id):
+    m = Article.find_one(id=id)
+    r = dict(
+        success=True,
+        data=m.json(),
+    )
+    return jsonResponse(r)
 
 
 @bp.route('/articles/new', methods=['POST'])
