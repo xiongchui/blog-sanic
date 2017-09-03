@@ -16,7 +16,7 @@ def template(tpl, **kwargs):
 
 def current_user(request):
     s = request.cookies.get('sessionid', '')
-    if s != '':
+    if s != '' and len(s) % 16 == 0:
         r = session.cipher_to_dict(s)
         u = User.find_one(id=r['id'])
         if u.password == r['password']:

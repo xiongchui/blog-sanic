@@ -7,94 +7,18 @@
 <body>
 <div id="id-action-container">
     <div class="user-container">
-        <input class="register-username" type="text" name="username">
-        <input class="register-password" type="text" name="password">
+        <input class="input-info" type="text" name="username">
+        <input class="input-info" type="text" name="mailbox">
+        <input class="input-info" type="text" name="password">
         <button class="user-action" type="submit" data-action="register">register</button>
     </div>
     <div class="user-container">
-        <input class="login-username" type="text" name="username">
-        <input class="login-password" type="password" name="password">
+        <input class="input-info" type="text" name="username">
+        <input class="input-info" type="password" name="password">
         <button class="user-action" type="submit" data-action="login">login</button>
     </div>
 </div>
 <script src="../../static/js/iv.js"></script>
-<script>
-    api.login = form => {
-        var req = {
-            url: '/users/login',
-            data: form,
-        }
-        api.ajax(req).then(body => {
-            var r = JSON.parse(body)
-            if (r.success) {
-                location.href = `/users/detail`
-            } else {
-                alert(`${r.msgs.join('')}`)
-            }
-        })
-    }
-
-    api.register = form => {
-        var req = {
-            url: '/users/register',
-            data: form,
-        }
-        api.ajax(req).then(body => {
-            var r = JSON.parse(body)
-            if (r.success) {
-                location.href = `/users/detail`
-            } else {
-                alert(`${r.msgs.join('')}`)
-            }
-        })
-    }
-
-    var actionLogin = event => {
-        var self = event.target
-        var container = self.closest('.user-container')
-        var username = container._e('.login-username').value
-        var password = container._e('.login-password').value
-        var form = {
-            username,
-            password,
-        }
-        api.login(form)
-    }
-
-    var actionRegister = event => {
-        var self = event.target
-        var container = self.closest('.user-container')
-        var username = container._e('.register-username').value
-        var password = container._e('.register-password').value
-        var form = {
-            username,
-            password,
-        }
-        api.register(form)
-    }
-
-    const bindEventsClick = () => {
-        var actions = {
-            login: actionLogin,
-            register: actionRegister,
-        }
-        var container = _e('#id-action-container')
-        container.addEventListener('click', event => {
-            var self = event.target
-            var actionName = self.dataset.action
-            var action = actions[actionName]
-            if (action !== undefined) {
-                action(event)
-            }
-        })
-    }
-
-    const __main = () => {
-        bindEventsClick()
-    }
-
-    __main()
-
-</script>
+<script src="../../static/user/js/index.js"></script>
 </body>
 </html>
