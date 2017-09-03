@@ -1,8 +1,6 @@
 from . import template
 from sanic import Blueprint
-from models.article import Article as Model
 from sanic.response import html as htmlResponse
-
 
 bp = Blueprint('article', url_prefix='/articles')
 

@@ -33,9 +33,9 @@ var loadArticles = () => {
     log(self)
     const source = self.dataset.source
     const template = eval(self.dataset.template)()
-    log('debug template', template)
+    log('debug templateArticle', template)
     const key = self.dataset.templateKey
-    log('info source template key', source, template, key)
+    log('info source templateArticle key', source, template, key)
     api.get(source, function (r) {
         var d = JSON.parse(r)
         let cells = []

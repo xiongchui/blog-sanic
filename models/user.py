@@ -11,6 +11,7 @@ class User(Mongua):
         fields = [
             ('username', str, ''),
             ('password', str, ''),
+            ('mailbox', str, '')
         ]
         fields.extend(super()._fields())
         return fields
@@ -20,6 +21,8 @@ class User(Mongua):
             '_id',
             'deleted',
             'type',
+            'password',
+            'mailbox',
         ]
         return b
 

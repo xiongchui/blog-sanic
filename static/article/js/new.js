@@ -30,14 +30,17 @@ const bindEventClickSubmit = () => {
         var overview = _e('#id-editor-overview').value
         var content = _e('#id-editor-content').value
         var title = _e('#id-input-title').value
-        var tags = _e('#id-input-tags').value.split(' ')
+        var category = _e('#id-input-category').value
         var form = {
             overview: overview,
             content: content,
             title: title,
-            tags: tags,
+            category: category,
         }
-        api.createArticle(form, res => {
+        api.ajax({
+            url: '/api/articles/new',
+            data: form,
+        }).then(res => {
             var d = JSON.parse(res)
             alert('success')
             location.href = `/articles/${d.id}`

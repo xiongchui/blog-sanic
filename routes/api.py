@@ -1,7 +1,8 @@
 from sanic.response import json as jsonResponse
 from sanic import Blueprint
 from models.article import Article
-import json
+from models.comment import Comment
+from routes import login_required, current_user
 
 bp = Blueprint('api', url_prefix='/api')
 
@@ -16,6 +17,7 @@ async def all(request):
     articles = Article.all()
     return jsonResponse(articles)
 
+
 @bp.route('/articles/<id:int>', methods=['GET'])
 async def detail(request, id):
     m = Article.find_one(id=id)
@@ -27,9 +29,22 @@ async def detail(request, id):
 
 
 @bp.route('/articles/new', methods=['POST'])
-async def newBlog(request):
-    form = json.loads(request.json)
+@login_required
+async def new(request):
+    form = request.json
     article = Article.new(form)
     return jsonResponse(article.json())
 
 
+@bp.route('/comment/add', methods=['POST'])
+@login_required
+async def new(request):
+    form = request.json
+    u = current_user(request)
+    form['user_id'] = u.id
+    article = Comment.new(form)
+    r = dict(
+        success=True,
+        data=article.json()
+    )
+    return jsonResponse(r)

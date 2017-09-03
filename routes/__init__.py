@@ -1,7 +1,8 @@
 from models.user import User
 from models.session import session
 from jinja2 import Environment, PackageLoader
-
+from functools import wraps
+from sanic.exceptions import abort
 
 # jinjia2 config
 env = Environment(
@@ -21,3 +22,16 @@ def current_user(request):
         return u
     else:
         return None
+
+
+def login_required(router_func):
+    @wraps(router_func)
+    async def wrapped_func(request, *args, **kwargs):
+        u = current_user(request)
+        if u is None:
+            abort(403)
+        else:
+            res = await router_func(request, *args, **kwargs)
+            return res
+    return wrapped_func
+

@@ -1,4 +1,5 @@
 from . import Mongua
+from .comment import Comment
 
 
 class Article(Mongua):
@@ -23,4 +24,15 @@ class Article(Mongua):
         ]
         return b
 
+    def comments(self):
+        ms = Comment.find(article_id=self.id)
+        ms = [m.json() for m in ms]
+        return ms
+
+    def json(self):
+        r = super().json()
+        r.update({
+            'comments': self.comments(),
+        })
+        return r
 
