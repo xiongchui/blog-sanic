@@ -1,20 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>半夜集</title>
+{% extends 'base_header.html' %}
+
+{% block title %}
+    index
+{% endblock %}
+
+{% block sytle %}
     <link rel="stylesheet" href="../../static/article/css/articles.css">
+{% endblock %}
+
+{% block body %}
+    <div id="id-articles-container"
+         data-source="/api/articles"
+         data-template="templateCellArticle"
+         data-template-key="t">
+
+    </div>
+{% endblock %}
+
+{% block script %}
+    {{ super() }}
+    <!-- js file -->
     <script src="//cdn.bootcss.com/nunjucks/3.0.0/nunjucks.js"></script>
     <script src="//cdn.bootcss.com/remarkable/1.7.1/remarkable.js"></script>
-    <script src="../../static/js/iv.js"></script>
     <script src="../../static/article/js/articles.js"></script>
-</head>
-<body>
-<div id="id-articles-container"
-     data-source="/api/articles"
-     data-template="templateCellArticle"
-     data-template-key="t">
-
-</div>
-</body>
-</html>
+{% endblock %}

@@ -1,56 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base_header.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>new blog</title>
+{% block title %}
+    new article
+{% endblock %}
+
+{% block sytle %}
     <link href="//cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" href="../../static/article/css/editor.css">
     <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/atom-one-dark.min.css" rel="stylesheet">
-</head>
+{% endblock %}
 
-<body>
-<div id="id-editor-container" class="container">
-    <form class="form-horizontal">
-        <div class="form-group">
-            <label for="id-input-title" class="col-xs-2 control-label">标题</label>
-            <div class="col-xs-10">
-                <input id="id-input-title" class="form-control" type="text">
+{% block body %}
+    <div id="id-editor-container" class="container">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="id-input-title" class="col-xs-2 control-label">标题</label>
+                <div class="col-xs-10">
+                    <input id="id-input-title" class="form-control" type="text">
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label for="id-editor-overview" class="col-md-2 control-label">概览</label>
-            <div class="col-md-10">
-                <textarea id="id-editor-overview" class="form-control"></textarea>
+            <div class="form-group">
+                <label for="id-editor-overview" class="col-md-2 control-label">概览</label>
+                <div class="col-md-10">
+                    <textarea id="id-editor-overview" class="form-control"></textarea>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label for="id-input-category" class="col-md-2 control-label">标签</label>
-            <div class="col-md-10">
-                <input id="id-input-category" type="text" class="form-control">
+            <div class="form-group">
+                <label for="id-input-category" class="col-md-2 control-label">标签</label>
+                <div class="col-md-10">
+                    <input id="id-input-category" type="text" class="form-control">
+                </div>
             </div>
+        </form>
+        <div class="form-group">
+            <button id="id-btn-submit" class="form-control">submit</button>
         </div>
-    </form>
-    <div class="form-group">
-        <button id="id-btn-submit" class="form-control">submit</button>
     </div>
-</div>
 
-<div class="container full-height">
-    <div class="row full-height">
-        <div class="col-md-6 full-height">
-            <textarea id="id-editor-content" class="full-height source">输入内容</textarea>
+    <div class="container full-height">
+        <div class="row full-height">
+            <div class="col-md-6 full-height">
+                <textarea id="id-editor-content" class="full-height source">输入内容</textarea>
+            </div>
+            <section class="col-md-6 full-height">
+                <div id="id-editor-show" class="full-height result-html">输入内容</div>
+            </section>
         </div>
-        <section class="col-md-6 full-height">
-            <div id="id-editor-show" class="full-height result-html">输入内容</div>
-        </section>
     </div>
-</div>
-<!-- js 文件 -->
-<script src="//cdn.bootcss.com/remarkable/1.7.1/remarkable.min.js"></script>
-<script src="//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-<script src="../../static/js/iv.js"></script>
-<script src="../../static/js/iv-md.js"></script>
-<script src="../../static/article/js/new.js"></script>
-</body>
-</html>
+{% endblock %}
+
+{% block script %}
+    {{ super() }}
+    <!-- js file -->
+    <script src="//cdn.bootcss.com/remarkable/1.7.1/remarkable.min.js"></script>
+    <script src="//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="../../static/js/iv-md.js"></script>
+    <script src="../../static/article/js/new.js"></script>
+{% endblock %}

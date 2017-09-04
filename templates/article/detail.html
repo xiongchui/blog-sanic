@@ -1,31 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>半夜集</title>
-    <!-- css file -->
-    <link rel="stylesheet" href="../../static/article/css/detail.css">
-</head>
-<body>
-<nav id="id-nav-head">
+{% extends 'base_header.html' %}
 
-</nav>
-<div id="id-article-container" data-id="{{ id }}">
-</div>
-<div id="id-comment-container">
-    <div id="id-comment-content">
+{% block title %}
+    详情页
+{% endblock %}
+
+{% block sytle %}
+    <link rel="stylesheet" href="../../static/article/css/detail.css">
+{% endblock %}
+
+{% block body %}
+    <div id="id-article-container" data-id="{{ id }}">
     </div>
-    <div>
-        <input id="id-input-content" data-id="{{ id }}" type="text" name="content">
-        <button id="id-btn-add" type="submit">add comment</button>
+    <div id="id-comment-container">
+        <div id="id-comment-content">
+        </div>
+        <div>
+            <input id="id-input-content" data-id="{{ id }}" type="text" name="content">
+            <button id="id-btn-add" type="submit">add comment</button>
+        </div>
     </div>
-</div>
-<!-- js file -->
-<script src="//cdn.bootcss.com/remarkable/1.7.1/remarkable.min.js"></script>
-<script src="//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-<script src="//cdn.bootcss.com/nunjucks/3.0.0/nunjucks.js"></script>
-<script src="../../static/js/iv.js"></script>
-<script src="../../static/js/iv-md.js"></script>
-<script src="../../static/article/js/detail.js"></script>
-</body>
-</html>
+{% endblock %}
+
+{% block script %}
+    {{ super() }}
+    <!-- js file -->
+    <script src="//cdn.bootcss.com/remarkable/1.7.1/remarkable.min.js"></script>
+    <script src="//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="//cdn.bootcss.com/nunjucks/3.0.0/nunjucks.js"></script>
+    <script src="../../static/js/iv-md.js"></script>
+    <script src="../../static/article/js/detail.js"></script>
+{% endblock %}

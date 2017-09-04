@@ -1,11 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>半夜集 - 用户页</title>
-</head>
-<body>
-<div id="id-action-container">
+{% extends 'base_header.html' %}
+
+{% block title %}
+    用户页
+{% endblock %}
+
+{% block sytle %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+    <div id="id-action-container">
     <div class="user-container">
         <input class="input-info" type="text" name="username">
         <input class="input-info" type="text" name="mailbox">
@@ -18,7 +22,7 @@
         <button class="user-action" type="submit" data-action="login">login</button>
     </div>
 </div>
-<script src="../../static/js/iv.js"></script>
-<script src="../../static/user/js/index.js"></script>
-</body>
-</html>
+{% endblock %}
+    <script src="../../static/user/js/index.js"></script>
+{% block script %}
+{% endblock %}

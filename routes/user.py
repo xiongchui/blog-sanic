@@ -1,13 +1,10 @@
-import json
 from models.session import session
 from sanic import Blueprint, Sanic
 from models.user import User
 from . import template, current_user, login_required
 from sanic.response import json as jsonResponse
-from sanic.response import html as htmlResponse
 from sanic.response import redirect
 
-app = Sanic(__name__)
 bp = Blueprint('user', url_prefix='/users')
 
 
@@ -51,14 +48,14 @@ async def login(request):
 
 @bp.route('/', methods=['GET'])
 async def index(request):
-    return htmlResponse(template('user/index.html'))
+    return template('user/index.html')
 
 
 @bp.route('/detail', methods=['GET'])
 @login_required
 async def detail(request):
     u = current_user(request)
-    return htmlResponse(template('user/detail.html'))
+    return template('user/detail.html', m=u)
 
 
 @bp.route('/logout', methods=['GET'])

@@ -3,15 +3,17 @@ from models.session import session
 from jinja2 import Environment, PackageLoader
 from functools import wraps
 from sanic.exceptions import abort
+from sanic.response import html
 
 # jinjia2 config
 env = Environment(
     loader=PackageLoader(__name__, '../templates'))
 
 
-def template(tpl, **kwargs):
-    template = env.get_template(tpl)
-    return template.render(kwargs)
+def template(path, **kwargs):
+    t = env.get_template(path)
+    r = t.render(kwargs)
+    return html(r)
 
 
 def current_user(request):
@@ -33,5 +35,5 @@ def login_required(router_func):
         else:
             res = await router_func(request, *args, **kwargs)
             return res
-    return wrapped_func
 
+    return wrapped_func

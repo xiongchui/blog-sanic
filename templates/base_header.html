@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>半夜集 - {% block title %}{% endblock %}</title>
+    {% block sytle %}
+
+    {% endblock %}
+</head>
+<body>
+<nav>
+    <a href="/articles/catagory/mind">随想</a>
+    <a href="/articles/category/python">Python</a>
+    <a href="/articles/category/javascript">JavaScript</a>
+</nav>
+{% block body %}
+
+{% endblock %}
+
+{% block script %}
+    <script src="../static/js/iv.js"></script>
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,22 @@
+{% extends 'base_header.html' %}
+
+{% block title %}
+    用户详情
+{% endblock %}
+
+{% block sytle %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+    <div>用户名：{{ m.username }} </div>
+    {% if m.mailbox %}
+        {% set mail = m.mailbox %}
+    {% else %}
+        {% set mail = '未设置' %}
+    {% endif %}
+    <div>邮箱：{{ mail }}</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}
