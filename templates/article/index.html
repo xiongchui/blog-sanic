@@ -1,10 +1,11 @@
-{% extends 'base_header.html' %}
+{% extends 'base.html' %}
 
 {% block title %}
     index
 {% endblock %}
 
 {% block sytle %}
+    {{ super() }}
     <link rel="stylesheet" href="../../static/article/css/articles.css">
 {% endblock %}
 

@@ -21,10 +21,16 @@ async def all(request):
 @bp.route('/articles/<id:int>', methods=['GET'])
 async def detail(request, id):
     m = Article.find_one(id=id)
-    r = dict(
-        success=True,
-        data=m.json(),
-    )
+    if m is None:
+        r = dict(
+        success = False,
+        msgs = ['404 NOT FOUND'],
+        )
+    else:
+        r = dict(
+            success=True,
+            data=m.json(),
+        )
     return jsonResponse(r)
 
 

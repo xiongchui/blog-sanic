@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <title>半夜集 - {% block title %}{% endblock %}</title>
     {% block sytle %}
-
+        <link rel="stylesheet" href="../static/css/base.css">
     {% endblock %}
 </head>
 <body>
 <nav>
-    <a href="/articles/catagory/mind">随想</a>
+    <a href="/">主页</a>
     <a href="/articles/category/python">Python</a>
     <a href="/articles/category/javascript">JavaScript</a>
+    <a href="/articles/catagory/mind">杂谈</a>
+    <a href="/other">其他</a>
 </nav>
 {% block body %}
 

@@ -1,10 +1,11 @@
-{% extends 'base_header.html' %}
+{% extends 'base.html' %}
 
 {% block title %}
     new article
 {% endblock %}
 
 {% block sytle %}
+    {{ super() }}
     <link href="//cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" href="../../static/article/css/editor.css">
     <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/atom-one-dark.min.css" rel="stylesheet">

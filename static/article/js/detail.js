@@ -50,8 +50,8 @@ var insertArticle = (res) => {
     var r = res.data
     r.content = htmlFromMarkdown(r.content)
     var s = templateArticle(r)
-    var container = _e('#id-article-container')
-    container.insertAdjacentHTML('beforeend', s)
+    var container = _e('article')
+    container.insertAdjacentHTML('afterbegin', s)
 }
 
 var loadComment = (r) => {
@@ -79,6 +79,7 @@ var loadArticle = () => {
             loadComment(r)
         } else {
             alert(`${r.msgs.join('')}`)
+            location.href = '/'
         }
     })
 

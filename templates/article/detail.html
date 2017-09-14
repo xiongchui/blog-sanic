@@ -1,22 +1,26 @@
-{% extends 'base_header.html' %}
+{% extends 'base.html' %}
 
 {% block title %}
     详情页
 {% endblock %}
 
 {% block sytle %}
+    {{ super() }}
     <link rel="stylesheet" href="../../static/article/css/detail.css">
 {% endblock %}
 
 {% block body %}
     <div id="id-article-container" data-id="{{ id }}">
-    </div>
-    <div id="id-comment-container">
-        <div id="id-comment-content">
-        </div>
-        <div>
-            <input id="id-input-content" data-id="{{ id }}" type="text" name="content">
-            <button id="id-btn-add" type="submit">add comment</button>
+        <article>
+
+        </article>
+        <div id="id-comment-container">
+            <div id="id-comment-content">
+            </div>
+            <div>
+                <input id="id-input-content" data-id="{{ id }}" type="text" name="content">
+                <button id="id-btn-add" type="submit">add comment</button>
+            </div>
         </div>
     </div>
 {% endblock %}
