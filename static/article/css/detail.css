@@ -7,6 +7,6 @@
     text-align: center;
 }
 
-body, div {
-    outline: 1px dashed red;
+article img {
+    max-width: 35%;
 }

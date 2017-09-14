@@ -1,24 +1,16 @@
-html,
-body,
-.full-height {
+html, body {
+    background-color: #fbfbfb;
     height: 100%;
 }
 
-body {
-    overflow-x: hidden;
-    padding-bottom: 180px;
-    background-color: #fbfbfb;
-}
-
-div {
-    outline: 1px dashed red;
-}
-
 .source {
-    width: 100%;
-    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
     font-size: 13px;
     padding: 2px;
+    margin: 2px;
+}
+
+.full-height {
+    height: 100%;
 }
 
 .result-html {
@@ -33,3 +25,40 @@ div {
     max-width: 35%;
 }
 
+.flex-box {
+    display: flex;
+}
+
+.flex-grow-1 {
+    flex-grow: 1;
+}
+
+.flex-grow-2 {
+    flex-grow: 2;
+}
+
+#id-editor-container {
+    width: 800px;
+    margin: 0 auto;
+}
+
+input, textarea {
+    margin: 6px;
+}
+
+.center {
+    justify-content: center;
+    align-items: center;
+}
+
+.half-width {
+    width: 50%;
+}
+
+button {
+    color: gray;
+    width: 50%;
+    height: 30px;
+    margin: 4px;
+    transform: translateX(50%);
+}

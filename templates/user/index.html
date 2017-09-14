@@ -23,6 +23,7 @@
     </div>
 </div>
 {% endblock %}
-    <script src="../../static/user/js/index.js"></script>
 {% block script %}
+    {{ super() }}
+    <script src="../../static/user/js/index.js"></script>
 {% endblock %}

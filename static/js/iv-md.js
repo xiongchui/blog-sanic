@@ -4,7 +4,7 @@ const mdConf = {
     html: false,
     xhtmlOut: false,
     breaks: false,
-    langPrefix: 'language-',
+    langPrefix: 'hljs language-',
     linkify: true,
     linkTarget: '',
     typographer: false,

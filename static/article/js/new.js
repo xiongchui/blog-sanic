@@ -42,8 +42,12 @@ const bindEventClickSubmit = () => {
             data: form,
         }).then(res => {
             var d = JSON.parse(res)
-            alert('success')
-            location.href = `/articles/${d.id}`
+            // todo, success 逻辑未修改
+            if (d.success) {
+                location.href = `/articles/${d.id}`
+            } else {
+                alert(d.msgs.join('\n'))
+            }
         })
     })
 }

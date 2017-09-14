@@ -6,46 +6,38 @@
 
 {% block sytle %}
     {{ super() }}
-    <link href="//cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" href="../../static/article/css/editor.css">
     <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/atom-one-dark.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
-    <div id="id-editor-container" class="container">
-        <form class="form-horizontal">
-            <div class="form-group">
-                <label for="id-input-title" class="col-xs-2 control-label">标题</label>
-                <div class="col-xs-10">
-                    <input id="id-input-title" class="form-control" type="text">
+    <div id="id-editor-container" class="full-height">
+        <div>
+            <div class="flex-box">
+                <div class="flex-grow-1 flex-box center">
+                    <label for="id-input-title flex-grow-1">标题</label>
                 </div>
+                <input id="id-input-title" class="flex-grow-2" type="text">
             </div>
-            <div class="form-group">
-                <label for="id-editor-overview" class="col-md-2 control-label">概览</label>
-                <div class="col-md-10">
-                    <textarea id="id-editor-overview" class="form-control"></textarea>
+            <div class="flex-box">
+                <div class="flex-grow-1 flex-box center">
+                    <label for="id-input-overview flex-grow-1">概览</label>
                 </div>
+                    <textarea id="id-editor-overview" class="flex-grow-2" rows="5"></textarea>
             </div>
-            <div class="form-group">
-                <label for="id-input-category" class="col-md-2 control-label">标签</label>
-                <div class="col-md-10">
-                    <input id="id-input-category" type="text" class="form-control">
+            <div class="flex-box">
+                <div class="flex-grow-1 flex-box center">
+                    <label for="id-input-category">标签</label>
                 </div>
+                    <input id="id-input-category" class="flex-grow-2" type="text">
             </div>
-        </form>
-        <div class="form-group">
-            <button id="id-btn-submit" class="form-control">submit</button>
         </div>
-    </div>
-
-    <div class="container full-height">
-        <div class="row full-height">
-            <div class="col-md-6 full-height">
-                <textarea id="id-editor-content" class="full-height source">输入内容</textarea>
-            </div>
-            <section class="col-md-6 full-height">
-                <div id="id-editor-show" class="full-height result-html">输入内容</div>
-            </section>
+        <div>
+            <button id="id-btn-submit">submit</button>
+        </div>
+        <div class="flex-box full-height">
+                    <textarea id="id-editor-content" class="source  flex-grow-1 half-width full-height">输入内容</textarea>
+                    <div id="id-editor-show" class="flex-grow-1 half-width result-html full-height">输入内容</div>
         </div>
     </div>
 {% endblock %}
@@ -53,8 +45,8 @@
 {% block script %}
     {{ super() }}
     <!-- js file -->
-    <script src="//cdn.bootcss.com/remarkable/1.7.1/remarkable.min.js"></script>
     <script src="//cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="//cdn.bootcss.com/remarkable/1.7.1/remarkable.min.js"></script>
     <script src="../../static/js/iv-md.js"></script>
     <script src="../../static/article/js/new.js"></script>
 {% endblock %}
