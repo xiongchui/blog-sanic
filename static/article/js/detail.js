@@ -58,6 +58,17 @@ var templateArticle = (m) => {
     return r
 }
 
+var insertCommentInput = () => {
+    var s = `<div>
+    <input id="id-input-content" data-id="{{ id }}" type="text" name="content">
+    <button id="id-btn-add" type="submit">add comment</button>
+</div>
+<div id="id-comment-content">
+</div>`
+    var container = _e('#id-comment-container')
+    container.insertAdjacentHTML('afterbegin', s)
+}
+
 var insertArticle = (res) => {
     var r = res.data
     r.content = htmlFromMarkdown(r.content)
@@ -88,6 +99,7 @@ var loadArticle = () => {
         if (r.success) {
             changeTitle(r)
             insertArticle(r)
+            insertCommentInput()
             loadComment(r)
         } else {
             // todo, 使用 sweetalert 修改效果
