@@ -1,9 +1,12 @@
 var nunjucksEnvironment = () => {
     // setup nunjucks
     var env = new nunjucks.Environment()
-    env.addFilter('formattime', function (time) {
+    env.addFilter('formattime', time => {
         var d = new Date(time * 1000)
-        return d.toLocaleString()
+        var year = d.getFullYear()
+        var month = d.getMonth() + 1
+        var date = d.getDate()
+        return `${month}/${date}/${year}`
     })
     return env
 }
@@ -19,25 +22,34 @@ var htmlFromMarkdown = (markdown) => {
 }
 
 var templateArticle = (m) => {
-    var s = `
-    <h2 id="id-article-title">
+    var s = `<header>
+    <h1 id="id-article-title">
         {{ m.title }}
-    </h2>
+    </h1>
+    <div class="article-info flex">
     <span id="id-article-ct">
+        <i class="fa fa-calendar-check-o fa-fw" aria-hidden="true"></i>
+        发表于
         {{ m.ct | formattime }}
     </span>
-    <span>
-        {{ m.category }}
-    </span>
-    <span id="id-article-ut">
+        <span id="id-article-ut">
+        <i class="fa fa-calendar fa-fw" aria-hidden="true"></i>
+        更新于
         {{ m.ut | formattime }}
     </span>
-    <div>
-        {{ m.overview }}
+        <span>
+        <i class="fa fa-tags fa-fw" aria-hidden="true"></i>
+        分类
+        <a href="/category/{{ m.category }}">{{ m.category }}</a>
+    </span>
     </div>
-    <div id="id-article-content">
-        {{ m.content | safe }}
-    </div>
+</header>
+<div class="article-overview">
+    {{ m.overview }}
+</div>
+<div id="id-article-content">
+    {{ m.content | safe }}
+</div>
         `
     var env = nunjucksEnvironment()
     var r = env.renderString(s, {
@@ -78,8 +90,9 @@ var loadArticle = () => {
             insertArticle(r)
             loadComment(r)
         } else {
+            // todo, 使用 sweetalert 修改效果
             alert(`${r.msgs.join('')}`)
-            location.href = '/'
+            location.href = '/articles'
         }
     })
 

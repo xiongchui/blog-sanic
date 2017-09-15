@@ -31,57 +31,6 @@ Element.prototype._es = function (sel) {
 Element.prototype.on = Element.prototype.addEventListener
 
 
-// 选择器函数 浏览器已经实现
-const closestClass = (element, className) => {
-    var e = element
-    while (e !== null) {
-        if (e.classList.contains(className)) {
-            return e
-        } else {
-            e = e.parentElement
-        }
-    }
-    return null
-}
-
-const closestId = (element, idName) => {
-    var e = element
-    while (e !== null) {
-        if (e.id === idName) {
-            return e
-        } else {
-            e = e.parentElement
-        }
-    }
-    return null
-}
-
-const closestTag = (element, tagName) => {
-    var e = element
-    while (e !== null) {
-        if (e.tagName === tagName.toUpperCase()) {
-            return e
-        } else {
-            e = e.parentElement
-        }
-    }
-    return null
-}
-
-const closest = (element, selector) => {
-    var flag = selector[0]
-    if (flag === '.') {
-        let className = selector.slice(1)
-        return closestClass(element, className)
-    } else if (flag === '#') {
-        let idName = selector.slice(1)
-        return closestId(element, idName)
-    } else {
-        return closestId(element, selector)
-    }
-}
-
-
 // 封装绑定事件函数
 var bindEvent = (element, eventName, callback) => {
     element.addEventListener(eventName, callback)

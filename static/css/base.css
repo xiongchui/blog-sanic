@@ -1,6 +1,7 @@
 body {
-    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-    color: #555;
+    font-family: "Input Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
+    color: #444;
+    margin: 0;
 }
 
 nav {
@@ -22,4 +23,3 @@ nav a:hover {
 nav a {
     color: #888;
 }
-

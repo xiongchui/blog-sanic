@@ -7,7 +7,7 @@
 {% block sytle %}
     {{ super() }}
     <link rel="stylesheet" href="../../static/article/css/detail.css">
-    <link href="//cdn.bootcss.com/highlight.js/9.12.0/styles/atom-one-dark.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
@@ -16,11 +16,11 @@
 
         </article>
         <div id="id-comment-container">
-            <div id="id-comment-content">
-            </div>
             <div>
                 <input id="id-input-content" data-id="{{ id }}" type="text" name="content">
                 <button id="id-btn-add" type="submit">add comment</button>
+            </div>
+            <div id="id-comment-content">
             </div>
         </div>
     </div>

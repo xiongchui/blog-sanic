@@ -1,6 +1,6 @@
 #id-article-container {
     width: 800px;
-    margin: 0 auto;
+    margin: 20px auto;
 }
 
 #id-article-title {
@@ -9,4 +9,50 @@
 
 article img {
     max-width: 35%;
+}
+
+/* bugfix: 代码背景色 */
+article code {
+    padding: 0;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    margin: 0;
+    background-color: rgba(27, 31, 35, 0.05);
+    border-radius: 3px
+}
+
+code::before, code::after, span::after {
+    letter-spacing: -0.2rem;
+    content: "\00a0";
+}
+
+/* bugfix: 代码块显示 */
+pre code::before, pre code::after {
+    letter-spacing: 0;
+    content: "";
+}
+
+a {
+    color: #666;
+}
+
+.article-info span {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.flex {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.article-overview {
+    padding: 40px 0 20px 0;
+}
+
+#id-article-content::before {
+    content: '';
+    display: block;
+    border-top: 1px dashed #777;
+    box-sizing: border-box;
 }
