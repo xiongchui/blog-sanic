@@ -1,24 +1,15 @@
-document.addEventListener("DOMContentLoaded", () => {
-    __main()
-}, false)
-
-var __main = () => {
-    loadArticles()
-    bindEventChangeArticles()
-}
-
 var templateCellArticle = () => {
     var s = `<article id="id-article-{{ t.id }}" class="article-cell">
     <div class="article-title">
-        <a class="article-link" href="articles/{{ t.id }}">{{ t.title }}</a>
+        <a class="article-link" href="#detail/{{ t.id }}">{{ t.title }}</a>
     </div>
     <div class="article-info">
         <span><i class="fa fa-calendar-check-o fa-fw" aria-hidden="true"></i>{{ t.ct | formattime }}</span>
         <span><i class="fa fa-calendar fa-fw" aria-hidden="true"></i>{{ t.ut | formattime }}</span>
-        <span><i class="fa fa-tags fa-fw" aria-hidden="true"></i><a href="/articles/categories/{{ t.category }}">{{ t.category }}</a></span>
+        <span><i class="fa fa-tags fa-fw" aria-hidden="true"></i><a href="#category/{{ t.category }}">{{ t.category }}</a></span>
     </div>
     <div class="article-overview">{{ t.overview }}</div>
-    <div class="article-detail"><a href="articles/{{ t.id }}">阅读全文</a></div>
+    <div class="article-detail"><a href="#detail/{{ t.id }}">阅读全文</a></div>
 </article>`
     return s
 }
@@ -47,14 +38,6 @@ var loadArticles = () => {
     })
 }
 
-var bindEventChangeArticles = () => {
-    window.addEventListener('hashchange', (e) => {
-        var url = e.newURL
-        var hash = url.split('#')[1]
-        loadArticlesByHash(hash)
-    })
-}
-
 var loadArticlesByHash = (hash) => {
     var env = nunjucksEnvironment()
     var body = localStorage.articles
@@ -76,3 +59,48 @@ var loadArticlesByHash = (hash) => {
     }
     container.innerHTML = cells.join('')
 }
+
+var templateContainerArticles = () => {
+    var s = `<div id="id-articles-container"
+     data-source="/api/articles"
+     data-template="templateCellArticle"
+     data-template-key="t">
+</div>`
+    return s
+}
+
+var initEnvArticles = () => {
+    var spa = _e('#id-spa')
+    var s = templateContainerArticles()
+    spa.insertAdjacentHTML('beforeend', s)
+}
+
+var initArticles = (hash) => {
+    initSpa()
+    initEnvArticles()
+    loadArticlesByHash(hash)
+}
+
+var bindEventChangeArticles = () => {
+    window.addEventListener('hashchange', (e) => {
+        var [url, hash] = e.newURL.split('#')
+        var [func, name] = hash.split('/')
+        var flag = url.endsWith('/articles') && name !== undefined
+        if (flag) {
+            var dic = {
+                'category': initArticles,
+                'detail': initArticle,
+            }
+            var f = dic[func] || loadArticlesByHash
+            f(name)
+        }
+
+    })
+}
+
+var __main = () => {
+    loadArticles()
+    bindEventChangeArticles()
+}
+
+__main()

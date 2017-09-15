@@ -1,15 +1,5 @@
-var nunjucksEnvironment = () => {
-    // setup nunjucks
-    var env = new nunjucks.Environment()
-    env.addFilter('formattime', function (time) {
-        var d = new Date(time * 1000)
-        return d.toLocaleString().split(',')[0]
-    })
-    return env
-}
-
-var changeTitle = (res) => {
-    var title = '半夜集 - ' + res.data.title
+var changeTitle = (article) => {
+    var title = '半夜集 - ' + article.title
     document.title = title
 }
 
@@ -18,7 +8,8 @@ var htmlFromMarkdown = (markdown) => {
     return s
 }
 
-var templateArticle = (m) => {
+var templateArticle = (article) => {
+    var m = article
     var s = `<header>
     <h1 id="id-article-title">
         {{ m.title }}
@@ -35,7 +26,7 @@ var templateArticle = (m) => {
         {{ m.ut | formattime }}
     </span>
         <span>
-        <i class="fa fa-tags" aria-hidden="true"></i>
+        <i class="fa fa-tags fa-fw" aria-hidden="true"></i>
         分类
         <a href="/category/{{ m.category }}">{{ m.category }}</a>
     </span>
@@ -66,8 +57,8 @@ var insertCommentInput = () => {
     container.insertAdjacentHTML('afterbegin', s)
 }
 
-var insertArticle = (res) => {
-    var r = res.data
+var insertArticle = (article) => {
+    var r = article
     r.content = htmlFromMarkdown(r.content)
     var s = templateArticle(r)
     var container = _e('article')
@@ -75,7 +66,7 @@ var insertArticle = (res) => {
 }
 
 var loadComment = (r) => {
-    ms = r.data.comments
+    ms = r.comments
     var container = _e('#id-comment-content')
     ms.forEach(m => {
         var s = templateComment(m)
@@ -83,28 +74,34 @@ var loadComment = (r) => {
     })
 }
 
-var loadArticle = () => {
+var loadArticleByHash = (hash) => {
     var container = _e('#id-article-container')
-    var id = container.dataset.id
-    var req = {
-        url: `/api/articles/${id}`,
-        method: 'GET',
+    var id = Number(hash)
+    var body = localStorage.articles
+    var arr = JSON.parse(body)
+    var article = arr.filter(e => e.id === id)[0]
+    if (article !== undefined) {
+        var r = article
+        changeTitle(r)
+        insertArticle(r)
+        insertCommentInput()
+        loadComment(r)
+        bindEventAddComment()
+    } else {
+        // todo, 使用 sweetalert
+        alert('没有此篇文章')
+        history.back()
     }
-    api.ajax(req).then(body => {
-        log('body', body)
-        var r = JSON.parse(body)
-        if (r.success) {
-            changeTitle(r)
-            insertArticle(r)
-            insertCommentInput()
-            loadComment(r)
-        } else {
-            // todo, 使用 sweetalert 修改效果
-            alert(`${r.msgs.join('')}`)
-            location.href = '/articles'
-        }
-    })
+}
 
+var templateContainerArticle = () => {
+    var s = `<div id="id-article-container">
+    <article>
+    </article>
+    <div id="id-comment-container">
+    </div>
+</div>`
+    return s
 }
 
 api.addComment = (form, callback) => {
@@ -117,7 +114,8 @@ api.addComment = (form, callback) => {
     })
 }
 
-var insertComment = string => {
+var insertComment = article => {
+    var s = templateComment(article)
     var container = _e('#id-comment-content')
     container.insertAdjacentHTML('beforeend', string)
 }
@@ -160,9 +158,19 @@ var bindEventAddComment = () => {
     })
 }
 
-var __main = () => {
-    loadArticle()
-    bindEventAddComment()
+var initEnvDetail = () => {
+    var spa = _e('#id-spa')
+    var s = templateContainerArticle()
+    spa.insertAdjacentHTML('beforeend', s)
 }
 
-__main()
+var initArticle = (hash) => {
+    initSpa()
+    initEnvDetail()
+    loadArticleByHash(hash)
+}
+
+var initSpa = () => {
+    var container = _e('#id-spa')
+    container.innerHTML = ''
+}

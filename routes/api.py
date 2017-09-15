@@ -10,7 +10,7 @@ bp = Blueprint('api', url_prefix='/api')
 @bp.route('/articles', methods=['GET'])
 async def all(request):
     articles = sorted(Article.all(), key=lambda e: e.ct, reverse=True)
-    print(articles)
+    articles = [m.json() for m in articles]
     return jsonResponse(articles)
 
 
