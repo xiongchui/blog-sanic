@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 var __main = () => {
     loadArticles()
+    bindEventChangeArticles()
 }
 
 var templateCellArticle = () => {
@@ -37,27 +38,41 @@ var nunjucksEnvironment = () => {
 
 // 自动获取数据并生成页面
 var loadArticles = () => {
-    var env = nunjucksEnvironment()
-    var self = _e('#id-articles-container')
-    log(self)
-    const source = self.dataset.source
-    const template = eval(self.dataset.template)()
-    log('debug templateArticle', template)
-    const key = self.dataset.templateKey
-    log('info source templateArticle key', source, template, key)
-    api.get(source, function (r) {
-        var d = JSON.parse(r)
-        let cells = []
-        for (i of d) {
-            let data = i
-            let args = {}
-            args[key] = data
-            let s = env.renderString(template, args)
-            cells.push(s)
-        }
-        var str = cells.join('')
-        log(str)
-        self.innerHTML = str
-        log('finish')
+    var container = _e('#id-articles-container')
+    const source = container.dataset.source
+    api.get(source, body => {
+        localStorage.articles = body
+        var hash = location.hash.slice(1)
+        loadArticlesByHash(hash)
     })
+}
+
+var bindEventChangeArticles = () => {
+    window.addEventListener('hashchange', (e) => {
+        var url = e.newURL
+        var hash = url.split('#')[1]
+        loadArticlesByHash(hash)
+    })
+}
+
+var loadArticlesByHash = (hash) => {
+    var env = nunjucksEnvironment()
+    var body = localStorage.articles
+    var arr = ['javascript', 'python', 'mind']
+    var d = JSON.parse(body)
+    if (arr.includes(hash)) {
+        d = d.filter(e => e.category === hash)
+    }
+    var container = _e('#id-articles-container')
+    const template = eval(container.dataset.template)()
+    const key = container.dataset.templateKey
+    let cells = []
+    for (i of d) {
+        let data = i
+        let args = {}
+        args[key] = data
+        let s = env.renderString(template, args)
+        cells.push(s)
+    }
+    container.innerHTML = cells.join('')
 }
