@@ -7,14 +7,10 @@ from routes import login_required, current_user
 bp = Blueprint('api', url_prefix='/api')
 
 
-@bp.route('/')
-async def bp_root(request):
-    return jsonResponse({'my': 'blueprint'})
-
-
 @bp.route('/articles', methods=['GET'])
 async def all(request):
-    articles = Article.all()
+    articles = sorted(Article.all(), key=lambda e: e.ct, reverse=True)
+    print(articles)
     return jsonResponse(articles)
 
 
@@ -23,8 +19,8 @@ async def detail(request, id):
     m = Article.find_one(id=id)
     if m is None:
         r = dict(
-        success = False,
-        msgs = ['404 NOT FOUND'],
+            success=False,
+            msgs=['404 NOT FOUND'],
         )
     else:
         r = dict(

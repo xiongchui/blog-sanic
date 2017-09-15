@@ -1,7 +1,4 @@
 from sanic import Sanic
-from routes.api import bp as router_api
-from routes.article import bp as router_article
-from routes.user import bp as route_user
 from sanic.exceptions import Forbidden
 from sanic.response import json as jsonResponse
 
@@ -9,9 +6,19 @@ app = Sanic(__name__)
 
 app.static('/static', './static')
 
-app.blueprint(router_api)
-app.blueprint(router_article)
-app.blueprint(route_user)
+
+def register_blueprint(app):
+    from routes.api import bp as router_api
+    from routes.article import bp as router_article
+    from routes.user import bp as route_user
+    from routes.interest import bp as route_interest
+    app.blueprint(router_api)
+    app.blueprint(router_article)
+    app.blueprint(route_user)
+    app.blueprint(route_interest)
+
+
+register_blueprint(app)
 
 
 @app.exception(Forbidden)

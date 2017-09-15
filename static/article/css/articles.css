@@ -1,5 +1,5 @@
 #id-articles-container {
-    margin: 0 auto;
+    margin: 40px auto 40px;
     width: 800px;
     height: 100%;
 }
@@ -18,15 +18,16 @@
 
 .article-link {
     font-size: 1.4rem;
+    color: #444;
+    text-decoration: none;
 }
 
 a:hover {
-    text-decoration: underline;
+    color: #111;
 }
 
 a {
-    color: #555;
-    text-decoration: none;
+    color: #777;
 }
 
 .article-info {
@@ -39,3 +40,14 @@ a {
     margin: 5px 0 15px 0;
 }
 
+.article-detail::after {
+    content: '»';
+}
+
+.article-detail a {
+    text-decoration: none;
+}
+
+.article-detail {
+    border-bottom: 1px solid #aaa;
+}
