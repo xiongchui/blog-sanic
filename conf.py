@@ -1,1 +1,1 @@
-salt = 'xiongchui'
+key = "xiongchui's site"

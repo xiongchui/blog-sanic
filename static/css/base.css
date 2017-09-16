@@ -26,3 +26,34 @@ nav a {
 .flex-box {
     display: flex;
 }
+
+/* 内容淡入*/
+.fadeIn {
+    animation: 2s fadein ease forwards;
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.slideDown {
+    animation: 1.5s slidedown ease-out forwards;
+}
+
+@keyframes slidedown {
+    0% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.delay {
+    animation-delay: 2s;
+}

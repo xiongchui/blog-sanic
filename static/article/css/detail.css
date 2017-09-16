@@ -3,6 +3,10 @@
     margin: 65px auto;
 }
 
+header {
+    margin: 0 0 25px 0;
+}
+
 #id-article-title {
     text-align: center;
 }
@@ -47,7 +51,7 @@ a {
 }
 
 .article-overview {
-    padding: 30px 0 10px 0;
+    padding: 10px 0 0 0;
 }
 
 #id-article-content::before {

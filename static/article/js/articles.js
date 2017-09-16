@@ -29,8 +29,7 @@ var nunjucksEnvironment = () => {
 
 // 自动获取数据并生成页面
 var loadArticles = () => {
-    var container = _e('#id-articles-container')
-    const source = container.dataset.source
+    const source = '/api/articles'
     api.get(source, body => {
         localStorage.articles = body
         var hash = location.hash.slice(1)
@@ -47,10 +46,10 @@ var loadArticlesByHash = (hash) => {
         d = d.filter(e => e.category === hash)
     }
     var container = _e('#id-articles-container')
-    const template = eval(container.dataset.template)()
-    const key = container.dataset.templateKey
+    const template = templateCellArticle()
+    const key = 't'
     let cells = []
-    for (i of d) {
+    for (let i of d) {
         let data = i
         let args = {}
         args[key] = data
@@ -62,6 +61,7 @@ var loadArticlesByHash = (hash) => {
 
 var templateContainerArticles = () => {
     var s = `<div id="id-articles-container"
+     class="fadeIn slideDown"
      data-source="/api/articles"
      data-template="templateCellArticle"
      data-template-key="t">

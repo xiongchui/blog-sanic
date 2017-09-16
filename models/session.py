@@ -1,11 +1,9 @@
 import base64
 import hashlib
 import json
-
+from conf import key
 from Crypto import Random
 from Crypto.Cipher import AES
-
-key = 'This is a key123'
 
 
 class AESCipher(object):
@@ -21,11 +19,12 @@ class AESCipher(object):
         return data
 
     def _pad(self, s):
-        return s + (self.bs - len(s) % self.bs) * AESCipher.str_to_bytes(chr(self.bs - len(s) % self.bs))
+        length = self.bs - len(s) % self.bs
+        return s + length * AESCipher.str_to_bytes(chr(length))
 
     @staticmethod
     def _unpad(s):
-        return s[:-ord(s[len(s) - 1:])]
+        return s[:-ord(s[-1])]
 
     def encrypt(self, raw):
         raw = self._pad(AESCipher.str_to_bytes(raw))

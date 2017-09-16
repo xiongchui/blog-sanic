@@ -95,7 +95,7 @@ var loadArticleByHash = (hash) => {
 }
 
 var templateContainerArticle = () => {
-    var s = `<div id="id-article-container">
+    var s = `<div id="id-article-container" class="fadeIn slideDown">
     <article>
     </article>
     <div id="id-comment-container">
@@ -121,7 +121,6 @@ var insertComment = (article) => {
 }
 
 var templateComment = (m) => {
-    log('m', m)
     var s = `<div>
         {{ m.user.username }}
     </div>
