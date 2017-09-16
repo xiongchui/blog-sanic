@@ -55,9 +55,9 @@ var templateArticle = (m) => {
     return r
 }
 
-var insertCommentInput = () => {
+var insertCommentInput = (articleId) => {
     var s = `<div>
-    <input id="id-input-content" data-id="{{ id }}" type="text" name="content">
+    <input id="id-input-content" data-id="${articleId}" type="text" name="content">
     <button id="id-btn-add" type="submit">add comment</button>
 </div>
 <div id="id-comment-content">
@@ -96,8 +96,9 @@ var loadArticle = () => {
         if (r.success) {
             changeTitle(r)
             insertArticle(r)
-            insertCommentInput()
+            insertCommentInput(id)
             loadComment(r)
+            bindEventAddComment()
         } else {
             // todo, 使用 sweetalert 修改效果
             alert(`${r.msgs.join('')}`)
@@ -142,6 +143,7 @@ var templateComment = (m) => {
 var bindEventAddComment = () => {
     var btn = _e('#id-btn-add')
     btn.addEventListener('click', event => {
+        log('clicked', event)
         var input = _e('#id-input-content')
         var form = {
             content: input.value,
@@ -162,7 +164,6 @@ var bindEventAddComment = () => {
 
 var __main = () => {
     loadArticle()
-    bindEventAddComment()
 }
 
 __main()

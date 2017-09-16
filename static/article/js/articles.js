@@ -34,7 +34,7 @@ var loadArticles = () => {
     api.get(source, body => {
         localStorage.articles = body
         var hash = location.hash.slice(1)
-        loadArticlesByHash(hash)
+        changeArticle(hash)
     })
 }
 
@@ -84,18 +84,22 @@ var initArticles = (hash) => {
 var bindEventChangeArticles = () => {
     window.addEventListener('hashchange', (e) => {
         var [url, hash] = e.newURL.split('#')
-        var [func, name] = hash.split('/')
-        var flag = url.endsWith('/articles') && name !== undefined
+        var flag = url.endsWith('/articles')
         if (flag) {
-            var dic = {
-                'category': initArticles,
-                'detail': initArticle,
-            }
-            var f = dic[func] || loadArticlesByHash
-            f(name)
+            changeArticle(hash)
         }
 
     })
+}
+
+var changeArticle = (hash) => {
+    var [func, name] = hash !== undefined ? hash.split('/') : [undefined, undefined]
+    var dic = {
+        'category': initArticles,
+        'detail': initArticle,
+    }
+    var f = dic[func] || initArticles
+    f(name)
 }
 
 var __main = () => {

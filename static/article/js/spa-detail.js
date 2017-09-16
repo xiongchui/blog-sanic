@@ -14,7 +14,7 @@ var templateArticle = (article) => {
     <h1 id="id-article-title">
         {{ m.title }}
     </h1>
-    <div class="article-info flex">
+    <div class="detail-info flex">
     <span id="id-article-ct">
         <i class="fa fa-calendar-check-o fa-fw" aria-hidden="true"></i>
         发表于
@@ -46,9 +46,9 @@ var templateArticle = (article) => {
     return r
 }
 
-var insertCommentInput = () => {
+var insertCommentInput = (articleId) => {
     var s = `<div>
-    <input id="id-input-content" data-id="{{ id }}" type="text" name="content">
+    <input id="id-input-content" data-id="${articleId}" type="text" name="content">
     <button id="id-btn-add" type="submit">add comment</button>
 </div>
 <div id="id-comment-content">
@@ -84,7 +84,7 @@ var loadArticleByHash = (hash) => {
         var r = article
         changeTitle(r)
         insertArticle(r)
-        insertCommentInput()
+        insertCommentInput(id)
         loadComment(r)
         bindEventAddComment()
     } else {
@@ -114,13 +114,14 @@ api.addComment = (form, callback) => {
     })
 }
 
-var insertComment = article => {
+var insertComment = (article) => {
     var s = templateComment(article)
     var container = _e('#id-comment-content')
-    container.insertAdjacentHTML('beforeend', string)
+    container.insertAdjacentHTML('beforeend', s)
 }
 
 var templateComment = (m) => {
+    log('m', m)
     var s = `<div>
         {{ m.user.username }}
     </div>
@@ -149,8 +150,7 @@ var bindEventAddComment = () => {
             var r = JSON.parse(body)
             if (r.success) {
                 var data = r.data
-                var t = templateComment(data)
-                insertComment(t)
+                insertComment(data)
             } else {
                 alert(`${r.msgs.join('')}`)
             }
