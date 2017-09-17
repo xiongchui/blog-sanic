@@ -20,6 +20,7 @@ def register_blueprint(app):
 
 register_blueprint(app)
 
+
 # todo, 首页暂时重定向
 @app.route('/', methods=['GET'])
 def index(request):
@@ -42,3 +43,12 @@ if __name__ == "__main__":
         debug=True,
     )
     app.run(**conf)
+
+
+def configure_app():
+    register_blueprint(app)
+
+
+def configured_app():
+    configure_app()
+    return app
