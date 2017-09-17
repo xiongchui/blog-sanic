@@ -61,10 +61,7 @@ var loadArticlesByHash = (hash) => {
 
 var templateContainerArticles = () => {
     var s = `<div id="id-articles-container"
-     class="fadeIn slideDown"
-     data-source="/api/articles"
-     data-template="templateCellArticle"
-     data-template-key="t">
+     class="fadeIn slideDown">
 </div>`
     return s
 }
