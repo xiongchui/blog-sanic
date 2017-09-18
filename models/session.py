@@ -24,7 +24,7 @@ class AESCipher(object):
 
     @staticmethod
     def _unpad(s):
-        return s[:-ord(s[-1])]
+        return s[:-ord(s[len(s) - 1:])]
 
     def encrypt(self, raw):
         raw = self._pad(AESCipher.str_to_bytes(raw))
@@ -52,9 +52,9 @@ class AESCipher(object):
 session = AESCipher(key=key)
 
 
-def test():
+def main():
     pass
 
 
 if __name__ == '__main__':
-    test()
+    main()

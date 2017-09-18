@@ -27,6 +27,10 @@ nav a {
     display: flex;
 }
 
+.space-around {
+    justify-content: space-around;
+}
+
 /* 内容淡入*/
 .fadeIn {
     animation: 2s fadein ease forwards;

@@ -22,7 +22,7 @@ async def register(request):
     else:
         res = jsonResponse(dict(
             sucess=False,
-            msgs=['注册失败'],
+            msgs=['用户已存在'],
         ))
     return res
 

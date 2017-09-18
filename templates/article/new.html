@@ -17,27 +17,40 @@
                 <div class="flex-grow-1 flex-box center">
                     <label for="id-input-title flex-grow-1">标题</label>
                 </div>
-                <input id="id-input-title" class="flex-grow-2" type="text">
+                <input id="id-input-title" class="flex-grow-2 article-info" type="text" name="title">
             </div>
             <div class="flex-box">
                 <div class="flex-grow-1 flex-box center">
                     <label for="id-input-overview flex-grow-1">概览</label>
                 </div>
-                    <textarea id="id-editor-overview" class="flex-grow-2" rows="5"></textarea>
+                <textarea id="id-editor-overview" class="flex-grow-2 article-info" name="overview" rows="5"></textarea>
             </div>
             <div class="flex-box">
                 <div class="flex-grow-1 flex-box center">
-                    <label for="id-input-category">标签</label>
+                    标签
                 </div>
-                    <input id="id-input-category" class="flex-grow-2" type="text">
+                <div class="flex-grow-2 flex-box space-around">
+                    <label for="id-radio-python">
+                        <input id="id-radio-python" class="article-info" name="category" type="radio" value="python">
+                        python
+                    </label>
+                    <label for="id-radio-javascript">
+                        <input id="id-radio-javascript" class="article-info" name="category" type="radio" value="javascript">
+                        javascript
+                    </label>
+                    <label for="id-radio-mind">
+                        <input id="id-radio-mind" class="article-info" name="category" type="radio" value="mind">
+                        mind
+                    </label>
+                </div>
             </div>
         </div>
         <div>
             <button id="id-btn-submit">submit</button>
         </div>
         <div class="flex-box full-height">
-                    <textarea id="id-editor-content" class="source  flex-grow-1 half-width full-height">输入内容</textarea>
-                    <div id="id-editor-show" class="flex-grow-1 half-width result-html full-height">输入内容</div>
+            <textarea id="id-editor-content" class="source article-info flex-grow-1 half-width full-height" name="content">输入内容</textarea>
+            <div id="id-editor-show" class="flex-grow-1 half-width result-html full-height">输入内容</div>
         </div>
     </div>
 {% endblock %}

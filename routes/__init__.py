@@ -18,7 +18,7 @@ def template(path, **kwargs):
 
 def current_user(request):
     s = request.cookies.get('sessionid', '')
-    if s != '' and len(s) % 16 == 0:
+    if s != '':
         r = session.cipher_to_dict(s)
         u = User.find_one(id=r['id'])
         if u.password == r['password']:

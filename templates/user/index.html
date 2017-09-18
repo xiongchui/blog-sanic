@@ -11,13 +11,18 @@
 {% block body %}
     <div id="id-action-container">
     <div class="user-container">
-        <input class="input-info" type="text" name="username">
-        <input class="input-info" type="text" name="mailbox">
-        <input class="input-info" type="text" name="password">
+        <label for="id-register-username">用户名</label>
+        <input id="id-register-username" class="input-info" type="text" name="username">
+        <label for="id-register-email">邮箱</label>
+        <input class="input-info" type="email" name="email">
+        <label for="id-register-password">密码</label>
+        <input id="id-register-password" class="input-info" type="password" name="password">
         <button class="user-action" type="submit" data-action="register">register</button>
     </div>
     <div class="user-container">
+        <label id="id-register-email" for="id-login-username">用户名</label>
         <input class="input-info" type="text" name="username">
+        <label for="id-login-username">用户名</label>
         <input class="input-info" type="password" name="password">
         <button class="user-action" type="submit" data-action="login">login</button>
     </div>

@@ -27,16 +27,18 @@ const bindEventShow = () => {
 
 const bindEventClickSubmit = () => {
     _e('#id-btn-submit').on('click', () => {
-        var overview = _e('#id-editor-overview').value
-        var content = _e('#id-editor-content').value
-        var title = _e('#id-input-title').value
-        var category = _e('#id-input-category').value
-        var form = {
-            overview: overview,
-            content: content,
-            title: title,
-            category: category,
-        }
+        var container = _e('#id-editor-container')
+        var es = container._es('.article-info')
+        var form = {}
+        es.forEach(e => {
+            if (e.type === 'radio') {
+                if (e.check === true) {
+                    form[e.name] = e.value
+                }
+            } else {
+                form[e.name] = e.value
+            }
+        })
         api.ajax({
             url: '/api/articles/new',
             data: form,
@@ -44,7 +46,7 @@ const bindEventClickSubmit = () => {
             var d = JSON.parse(res)
             // todo, success 逻辑未修改
             if (d.success) {
-                location.href = `/articles/${d.id}`
+                location.href = `/articles#detail/${d.id}`
             } else {
                 alert(d.msgs.join('\n'))
             }
