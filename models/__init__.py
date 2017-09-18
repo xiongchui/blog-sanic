@@ -2,7 +2,6 @@ import time
 
 from pymongo import *
 
-
 # mongo 数据库的名字
 mongodb_name = 'blog'
 client = MongoClient("mongodb://localhost:27017")
@@ -201,21 +200,32 @@ class Mongua(object):
         name = self.__class__.__name__
         mongodb[name].save(self.__dict__)
 
-    def delete(self):
+    @classmethod
+    def delete_logically(cls, query, **kwargs):
         '''
         删除数据，这里的数据是一种逻辑删除
         '''
-        name = self.__class__.__name__
-        query = {
-            'id': self.id,
-        }
+        name = cls.__name__
         values = {
             'deleted': True
         }
-        mongodb[name].update_one(query, values)
-        # 下面两行可以完成同样的功能, 不过速度可能会慢一些所以用 update_one 函数
-        # self.deleted = True
-        # self.save()
+        ms = mongodb[name].update_many(query, values, **kwargs).raw_result
+        return ms
+
+    @classmethod
+    def delete_physically(cls, query, **kwargs):
+        '''
+        物理删除
+        '''
+        name = cls.__name__
+        ms = mongodb[name].delete_many(query, **kwargs).raw_result
+        return ms
+
+    @classmethod
+    def update(cls, query, update, **kwargs):
+        name = cls.__name__
+        ms = mongodb[name].update_one(query, update, **kwargs).raw_result
+        return ms
 
     def json(self):
         """

@@ -1,8 +1,8 @@
 from models import Mongua
 from models.user import User
+from .mixin import MixinMongo
 
-
-class Comment(Mongua):
+class Comment(Mongua, MixinMongo):
     # 子类必须实现 _fields 类方法来定义字段
     @classmethod
     def _fields(cls):
@@ -24,7 +24,6 @@ class Comment(Mongua):
 
     def user(self):
         m = User.find_one(id=self.user_id)
-        m = m.json()
         return m
 
     def json(self):

@@ -1,10 +1,11 @@
 import hashlib
 
 from models import Mongua
-salt = 'xiongchui'
+from .mixin import MixinMongo
+from conf import salt
 
 
-class User(Mongua):
+class User(Mongua, MixinMongo):
     # 子类必须实现 _fields 类方法来定义字段
     @classmethod
     def _fields(cls):
@@ -64,7 +65,7 @@ class User(Mongua):
 
     @classmethod
     def register(cls, form={}):
-        if(cls.validate_register(form)):
+        if (cls.validate_register(form)):
             u = cls.new(form)
             return u
         else:
@@ -92,8 +93,6 @@ def test_create_user():
 def test():
     test_create_user()
 
+
 if __name__ == '__main__':
     test()
-
-
-

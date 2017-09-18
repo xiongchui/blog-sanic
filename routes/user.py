@@ -1,9 +1,10 @@
-from models.session import session
-from sanic import Blueprint, Sanic
-from models.user import User
-from . import template, current_user, login_required
+from sanic import Blueprint
 from sanic.response import json as jsonResponse
 from sanic.response import redirect
+
+from models.user import User
+from models.session import session
+from . import template, current_user, login_required
 
 bp = Blueprint('user', url_prefix='/users')
 

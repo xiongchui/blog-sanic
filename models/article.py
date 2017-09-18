@@ -1,8 +1,8 @@
 from . import Mongua
 from .comment import Comment
+from .mixin import MixinMongo
 
-
-class Article(Mongua):
+class Article(Mongua, MixinMongo):
     # 子类必须实现 _fields 类方法来定义字段
     @classmethod
     def _fields(cls):

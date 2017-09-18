@@ -1,4 +1,4 @@
-from sanic.response import json as jsonResponse
+from routes import jsonResponse
 from sanic import Blueprint
 from models.article import Article
 from models.comment import Comment
@@ -9,9 +9,8 @@ bp = Blueprint('api', url_prefix='/api')
 
 @bp.route('/articles', methods=['GET'])
 async def all(request):
-    articles = sorted(Article.all(), key=lambda e: e.ct, reverse=True)
-    articles = [m.json() for m in articles]
-    return jsonResponse(articles)
+    status, data, msgs = Article.mixin_all()
+    return jsonResponse(status, data, msgs)
 
 
 @bp.route('/articles/<id:int>', methods=['GET'])

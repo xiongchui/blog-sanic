@@ -3,7 +3,7 @@ from models.session import session
 from jinja2 import Environment, PackageLoader
 from functools import wraps
 from sanic.exceptions import abort
-from sanic.response import html
+from sanic.response import html, json
 
 # jinjia2 config
 env = Environment(
@@ -37,3 +37,12 @@ def login_required(router_func):
             return res
 
     return wrapped_func
+
+
+def jsonResponse(status=True, data={}, msgs=[]):
+    body = dict(
+        success=status,
+        data=data,
+        msgs=msgs,
+    )
+    return json(body)

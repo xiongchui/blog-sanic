@@ -31,31 +31,41 @@ var nunjucksEnvironment = () => {
 var loadArticles = () => {
     const source = '/api/articles'
     api.get(source, body => {
-        localStorage.articles = body
-        var hash = location.hash.slice(1)
-        changeArticle(hash)
+        var res = JSON.parse(body)
+        if (res.success) {
+            var body = JSON.stringify(res.data)
+            localStorage.articles = body
+            var hash = location.hash.slice(1)
+            changeArticle(hash)
+        } else {
+            alert(msgs.join(''))
+        }
     })
 }
 
-var loadArticlesByHash = (hash) => {
-    var env = nunjucksEnvironment()
+var loadArticlesByHash = (subHash) => {
     var body = localStorage.articles
     var arr = ['javascript', 'python', 'mind']
     var d = JSON.parse(body)
-    if (arr.includes(hash)) {
-        d = d.filter(e => e.category === hash)
+    if (arr.includes(subHash)) {
+        d = d.filter(e => e.category === subHash)
     }
+    insertArticles(d)
+
+}
+
+var insertArticles = (articles) => {
+    var env = nunjucksEnvironment()
     var container = _e('#id-articles-container')
     const template = templateCellArticle()
     const key = 't'
     let cells = []
-    for (let i of d) {
-        let data = i
+    articles.forEach(m => {
         let args = {}
-        args[key] = data
+        args[key] = m
         let s = env.renderString(template, args)
         cells.push(s)
-    }
+    })
     container.innerHTML = cells.join('')
 }
 
