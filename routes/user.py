@@ -1,10 +1,9 @@
 from sanic import Blueprint
-from sanic.response import json as jsonResponse
 from sanic.response import redirect
 
 from models.user import User
 from models.session import session
-from . import template, current_user, login_required
+from . import template, current_user, login_required, jsonResponse
 
 bp = Blueprint('user', url_prefix='/users')
 
@@ -12,38 +11,30 @@ bp = Blueprint('user', url_prefix='/users')
 @bp.route('/register', methods=['POST'])
 async def register(request):
     d = request.json
-    u = User.register(d)
-    if u is not None:
-        res = jsonResponse(dict(
-            success=True,
-            data=u.json(),
-        ))
-        res.cookies['sessionid'] = session.dict_to_cipher(u.json())
+    status, data, msgs = User.register(d)
+    res = jsonResponse(
+        status=status,
+        data=data,
+        msgs=msgs
+    )
+    if status:
+        res.cookies['sessionid'] = session.dict_to_cipher(data.json())
         res.cookies['sessionid']['httponly'] = True
-    else:
-        res = jsonResponse(dict(
-            sucess=False,
-            msgs=['用户已存在'],
-        ))
     return res
 
 
 @bp.route('/login', methods=['POST'])
 async def login(request):
     d = request.json
-    u = User.login(d)
-    if u is not None:
-        res = jsonResponse(dict(
-            success=True,
-            data=u.json(),
-        ))
-        res.cookies['sessionid'] = session.dict_to_cipher(u.json())
+    status, data, msgs = User.login(d)
+    res = jsonResponse(
+        status=status,
+        data=data,
+        msgs=msgs
+    )
+    if status:
+        res.cookies['sessionid'] = session.dict_to_cipher(data.json())
         res.cookies['sessionid']['httponly'] = True
-    else:
-        res = jsonResponse(dict(
-            sucess=False,
-            msgs=['登录失败'],
-        ))
     return res
 
 

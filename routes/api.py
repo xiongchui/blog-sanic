@@ -15,26 +15,16 @@ async def all(request):
 
 @bp.route('/articles/<id:int>', methods=['GET'])
 async def detail(request, id):
-    m = Article.find_one(id=id)
-    if m is None:
-        r = dict(
-            success=False,
-            msgs=['404 NOT FOUND'],
-        )
-    else:
-        r = dict(
-            success=True,
-            data=m.json(),
-        )
-    return jsonResponse(r)
+    status, data, msgs = Article.mixin_retrieve(id=id)
+    return jsonResponse(status, data, msgs)
 
 
 @bp.route('/articles/new', methods=['POST'])
 @login_required
 async def new(request):
     form = request.json
-    article = Article.new(form)
-    return jsonResponse(article.json())
+    status, data, msgs = Article.mixin_create(form)
+    return jsonResponse(status, data, msgs)
 
 
 @bp.route('/comment/add', methods=['POST'])
@@ -43,9 +33,6 @@ async def new(request):
     form = request.json
     u = current_user(request)
     form['user_id'] = u.id
-    article = Comment.new(form)
-    r = dict(
-        success=True,
-        data=article.json()
-    )
-    return jsonResponse(r)
+    status, data, msgs = Comment.mixin_create(form)
+    print(status, data, msgs)
+    return jsonResponse(status, data, msgs)

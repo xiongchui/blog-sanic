@@ -2,9 +2,9 @@ class MixinMongo(object):
     @classmethod
     def mixin_create(cls, form):
         status, data, msgs = False, None, []
-        m = cls.new(**form)
+        m = cls.new(form)
         status = True
-        data = m.json()
+        data = m
         return status, data, msgs
 
     @classmethod
@@ -31,7 +31,7 @@ class MixinMongo(object):
         m = cls.find_one(**kwargs)
         if m is not None:
             status = True
-            data = m.json()
+            data = m
         else:
             msgs.append('没有此项')
         return status, data, msgs

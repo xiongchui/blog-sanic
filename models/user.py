@@ -37,6 +37,7 @@ class User(Mongua, MixinMongo):
 
     @classmethod
     def new(cls, form={}, **kwargs):
+        print('form', form)
         form['password'] = cls._salted_password(form['password'])
         return super().new(form, **kwargs)
 
@@ -65,20 +66,21 @@ class User(Mongua, MixinMongo):
 
     @classmethod
     def register(cls, form={}):
+        status, data, msgs = False, None, []
         if (cls.validate_register(form)):
-            u = cls.new(form)
-            return u
-        else:
-            return None
+            status, data, msgs = cls.mixin_create(form)
+        if not status:
+            msgs.append('注册失败')
+        return status, data, msgs
 
     @classmethod
     def login(cls, form={}):
         username = form.get('username', '')
-        u = cls.find_one(username=username)
-        if u is not None and u.validate_auth(form):
-            return u
-        else:
-            return None
+        status, data, msgs = cls.mixin_retrieve(username=username)
+        status = status and data.validate_auth(form)
+        if not status:
+            msgs.append('登录失败')
+        return status, data, msgs
 
 
 def test_create_user():

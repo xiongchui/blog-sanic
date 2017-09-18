@@ -24,7 +24,7 @@ class Comment(Mongua, MixinMongo):
 
     def user(self):
         m = User.find_one(id=self.user_id)
-        return m
+        return m and m.json()
 
     def json(self):
         r = super().json()
