@@ -28,11 +28,11 @@ class User(Mongua, MixinMongo):
 
     @staticmethod
     def _salted_password(password):
-        def md5hex(ascii_str):
+        def _md5hex(ascii_str):
             return hashlib.md5(ascii_str.encode('ascii')).hexdigest()
 
-        hash1 = md5hex(password)
-        hash2 = md5hex(hash1 + salt)
+        hash1 = _md5hex(password)
+        hash2 = _md5hex(hash1 + salt)
         return hash2
 
     @classmethod

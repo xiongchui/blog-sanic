@@ -21,7 +21,7 @@ def current_user(request):
     if s != '':
         r = session.cipher_to_dict(s)
         u = User.find_one(id=r['id'])
-        if u.password == r['password']:
+        if u is not None and u.password == r['password']:
             return u
     return None
 
