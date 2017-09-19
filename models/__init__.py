@@ -224,8 +224,21 @@ class Mongua(object):
     @classmethod
     def update_one(cls, query, update, **kwargs):
         name = cls.__name__
-        m = mongodb[name].find_one_and_update(query, update, **kwargs)
+        update['ut'] = timestamp()
+        dic = {
+            '$set': update,
+        }
+        m = mongodb[name].find_one_and_update(query, dic, return_document=ReturnDocument.BEFORE, **kwargs)
         return m and cls._new_with_bson(m)
+
+    @classmethod
+    def delete_many(cls, query):
+        ms = cls.find(**query)
+        for m in ms:
+            cls.delete_one({'id': m.id})
+        return ms
+
+
 
     def json(self):
         """

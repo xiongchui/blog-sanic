@@ -42,3 +42,11 @@ async def comment_add(request):
     form['user_id'] = u.id
     status, data, msgs = Comment.mixin_create(form)
     return jsonResponse(status, data, msgs)
+
+
+@bp.route('/articles/update/<article_id:int>/', methods=['POST'])
+@login_required
+async def update(request, article_id):
+    form = request.json
+    status, data, msgs = Article.mixin_update(article_id, form)
+    return jsonResponse(status, data, msgs)

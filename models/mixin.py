@@ -42,7 +42,7 @@ class MixinMongo(object):
         query = {
             'id': model_id,
         }
-        m = cls.update(query, form)
+        m = cls.update_one(query, form)
         if m is not None:
             status = True
             data = m.json()

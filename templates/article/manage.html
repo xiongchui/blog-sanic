@@ -8,6 +8,18 @@
     <link href="https://cdn.bootcss.com/alertifyjs-alertify.js/1.0.11/css/alertify.css" rel="stylesheet">
 {% endblock %}
 
+{% block nav %}
+    <nav class="flex-box fadeIn">
+        <a href="/articles/manage"><i class="fa fa-home fa-fw" aria-hidden="true"></i>主页</a>
+        <a href="#category/all"><i class="fa fa-book fa-fw" aria-hidden="true"></i>所有文章</a>
+        <a href="#category/python"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i>Python</a>
+        <a href="#category/javascript"><i class="fa fa-magic fa-fw" aria-hidden="true"></i>JavaScript</a>
+        <a href="#category/mind"><i class="fa fa-tint fa-fw" aria-hidden="true"></i>杂谈</a>
+        <a href="/categories/about"><i class="fa fa-user fa-fw" aria-hidden="true"></i>关于</a>
+    <a href="/articles/manage/new"><i class="fa fa-file-o fa-fw" aria-hidden="true"></i>新增</a>
+    </nav>
+{% endblock %}
+
 {% block body %}
     <div id="id-spa">
     </div>

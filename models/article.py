@@ -36,3 +36,9 @@ class Article(Mongua, MixinMongo):
         })
         return r
 
+    @classmethod
+    def delete_one(cls, query, **kwargs):
+        m = super().delete_one(query, **kwargs)
+        if m is not None:
+            Comment.delete_many({'article_id': m.id})
+        return m

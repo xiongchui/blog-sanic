@@ -55,7 +55,7 @@ input, textarea {
     width: 50%;
 }
 
-button {
+#id-btn-submit {
     color: gray;
     width: 50%;
     height: 30px;

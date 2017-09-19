@@ -28,7 +28,7 @@ var templateArticle = (article) => {
         <span>
         <i class="fa fa-tags fa-fw" aria-hidden="true"></i>
         分类
-        <a href="/category/{{ m.category }}">{{ m.category }}</a>
+        <a href="#category/{{ m.category }}">{{ m.category }}</a>
     </span>
     </div>
 </header>
@@ -191,8 +191,108 @@ var deleteArticle = (id) => {
     })
 }
 
-var updateArticle = (id) => {
+var insertArticleUpdateInput = (id) => {
+    var articles = JSON.parse(localStorage.articles)
+    var m = articles.find(e => e.id === id)
+    var s = `<div id="id-editor-container" class="full-height">
+    <div>
+        <div class="flex-box">
+            <div class="flex-grow-1 flex-box center">
+                <label for="id-input-title flex-grow-1">标题</label>
+            </div>
+            <input id="id-input-title" class="flex-grow-2 article-info" type="text" name="title" value="${m.title}">
+        </div>
+        <div class="flex-box">
+            <div class="flex-grow-1 flex-box center">
+                <label for="id-input-overview flex-grow-1">概览</label>
+            </div>
+            <textarea id="id-editor-overview" class="flex-grow-2 article-info" name="overview" rows="5">${m.overview}</textarea>
+        </div>
+        <div class="flex-box">
+            <div class="flex-grow-1 flex-box center">
+                标签
+            </div>
+            <div class="flex-grow-2 flex-box space-around">
+                <label for="id-radio-python">
+                    <input id="id-radio-python" class="article-info" name="category" type="radio" value="python">
+                    python
+                </label>
+                <label for="id-radio-javascript">
+                    <input id="id-radio-javascript" class="article-info" name="category" type="radio"
+                           value="javascript">
+                    javascript
+                </label>
+                <label for="id-radio-mind">
+                    <input id="id-radio-mind" class="article-info" name="category" type="radio" value="mind">
+                    mind
+                </label>
+            </div>
+        </div>
+    </div>
+    <div>
+        <button id="id-btn-update">update</button>
+    </div>
+    <div class="flex-box full-height">
+        <textarea id="id-editor-content" class="source article-info flex-grow-1 half-width full-height" name="content">${m.content}</textarea>
+        <div id="id-editor-show" class="flex-grow-1 half-width result-html full-height">${htmlFromMarkdown(m.content)}</div>
+    </div>
+</div>`
+    var spa = _e('#id-spa')
+    spa.insertAdjacentHTML('afterbegin', s)
+}
 
+var bindEventClickUpdate = (id) => {
+    var btn = _e('#id-btn-update')
+    btn.on('click', (e) => {
+        var container = _e('#id-editor-container')
+        var es = container._es('.article-info')
+        var form = {}
+        es.forEach(e => {
+            if (e.type === 'radio') {
+                if (e.checked === true) {
+                    form[e.name] = e.value
+                }
+            } else {
+                form[e.name] = e.value
+            }
+        })
+        api.ajax({
+            url: `/api/articles/update/${id}`,
+            data: form,
+        }).then(body => {
+            var r = JSON.parse(body)
+            if (r.success) {
+                var m = r.data
+                alertify.success('add article succeeded')
+                loadArticles()
+                location.hash = `#detail/${m.id}`
+            } else {
+                alertify.error(r.msgs.join('\n'))
+            }
+        })
+    })
+}
+
+const bindEventsUpdate = (id) => {
+    bindEventShow()
+    bindEventClickUpdate(id)
+}
+
+const bindEventShow = () => {
+    d = _e('#id-editor-content')
+    d.on('keyup', () => {
+        var s = d.value
+        var t = htmlFromMarkdown(s)
+        _e('#id-editor-show').innerHTML = t
+    })
+}
+
+
+var updateArticle = (subHash) => {
+    var id = Number(subHash)
+    initSpa()
+    insertArticleUpdateInput(id)
+    bindEventsUpdate(id)
 }
 
 
@@ -202,7 +302,7 @@ var changeArticle = (hash) => {
         'category': initArticles,
         'detail': initArticle,
         'delete': deleteArticle,
-        'update': updateArticle,
+        'edit': updateArticle,
     }
     var f = dic[func] || initArticles
     f(subHash)
