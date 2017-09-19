@@ -74,9 +74,9 @@ var loadComment = (r) => {
     })
 }
 
-var loadArticleByHash = (hash) => {
+var loadArticleById = (id) => {
     var container = _e('#id-article-container')
-    var id = Number(hash)
+    id = Number(id)
     var body = localStorage.articles
     var arr = JSON.parse(body)
     var article = arr.filter(e => e.id === id)[0]
@@ -87,9 +87,8 @@ var loadArticleByHash = (hash) => {
         insertCommentInput(id)
         loadComment(r)
         bindEventAddComment()
+        alertify.success(`load current article succeeded`)
     } else {
-        // todo, 使用 sweetalert
-        alert('没有此篇文章')
         history.back()
     }
 }
@@ -150,8 +149,9 @@ var bindEventAddComment = () => {
             if (r.success) {
                 var data = r.data
                 insertComment(data)
+                alertify.success('add comment succeeded')
             } else {
-                alert(`${r.msgs.join('')}`)
+                alertify.error(r.msgs.join(''))
             }
         })
     })
@@ -166,7 +166,7 @@ var initEnvDetail = () => {
 var initArticle = (hash) => {
     initSpa()
     initEnvDetail()
-    loadArticleByHash(hash)
+    loadArticleById(hash)
 }
 
 var initSpa = () => {

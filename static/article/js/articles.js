@@ -37,8 +37,9 @@ var loadArticles = () => {
             localStorage.articles = body
             var hash = location.hash.slice(1)
             changeArticle(hash)
+            alertify.success('load all articles succeeded')
         } else {
-            alert(msgs.join(''))
+            alertify.error(msgs.join(''))
         }
     })
 }
@@ -49,9 +50,13 @@ var loadArticlesByHash = (subHash) => {
     var d = JSON.parse(body)
     if (arr.includes(subHash)) {
         d = d.filter(e => e.category === subHash)
+        alertify.success(`load category ${subHash} succeeded`)
+    } else {
+        if (subHash !== undefined && subHash !== 'all') {
+            alertify.error(`no ${subHash} category and load all articles`)
+        }
     }
     insertArticles(d)
-
 }
 
 var insertArticles = (articles) => {

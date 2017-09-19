@@ -33,15 +33,6 @@ def ignore_403(request, exception):
     return jsonResponse(r)
 
 
-if __name__ == "__main__":
-    conf = dict(
-        host="0.0.0.0",
-        port=5000,
-        debug=True,
-    )
-    app.run(**conf)
-
-
 def configure_app():
     register_blueprint(app)
 
@@ -49,3 +40,12 @@ def configure_app():
 def configured_app():
     configure_app()
     return app
+
+if __name__ == "__main__":
+    conf = dict(
+        host="0.0.0.0",
+        port=5000,
+        debug=True,
+    )
+    configure_app()
+    app.run(**conf)
