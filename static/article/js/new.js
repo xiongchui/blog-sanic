@@ -32,7 +32,7 @@ const bindEventClickSubmit = () => {
         var form = {}
         es.forEach(e => {
             if (e.type === 'radio') {
-                if (e.check === true) {
+                if (e.checked === true) {
                     form[e.name] = e.value
                 }
             } else {
@@ -42,13 +42,14 @@ const bindEventClickSubmit = () => {
         api.ajax({
             url: '/api/articles/new',
             data: form,
-        }).then(res => {
-            var d = JSON.parse(res)
-            // todo, success 逻辑未修改
-            if (d.success) {
-                location.href = `/articles#detail/${d.id}`
+        }).then(body => {
+            var r = JSON.parse(body)
+            if (r.success) {
+                var m = r.data
+                alertify.success('add article succeeded')
+                location.href = `/articles/manage#detail/${m.id}`
             } else {
-                alert(d.msgs.join('\n'))
+                alertify.error(r.msgs.join('\n'))
             }
         })
     })

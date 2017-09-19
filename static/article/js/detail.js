@@ -37,7 +37,7 @@ var templateArticle = (m) => {
         <span>
         <i class="fa fa-tags" aria-hidden="true"></i>
         分类
-        <a href="/category/{{ m.category }}">{{ m.category }}</a>
+        <a href="#category/{{ m.category }}">{{ m.category }}</a>
     </span>
     </div>
 </header>
@@ -154,9 +154,10 @@ var bindEventAddComment = () => {
             if (r.success) {
                 var data = r.data
                 var t = templateComment(data)
+                alertify.suceess('add comment successfully')
                 insertComment(t)
             } else {
-                alert(`${r.msgs.join('')}`)
+                alertify.error(`${r.msgs.join('')}`)
             }
         })
     })

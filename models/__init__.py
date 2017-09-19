@@ -201,7 +201,7 @@ class Mongua(object):
         mongodb[name].save(self.__dict__)
 
     @classmethod
-    def delete_logically(cls, query, **kwargs):
+    def delete_one_logically(cls, query):
         '''
         删除数据，这里的数据是一种逻辑删除
         '''
@@ -209,23 +209,23 @@ class Mongua(object):
         values = {
             'deleted': True
         }
-        ms = mongodb[name].update_many(query, values, **kwargs).raw_result
-        return ms
+        m = mongodb[name].find_one_and_update(query, values)
+        return m and cls._new_with_bson(m)
 
     @classmethod
-    def delete_physically(cls, query, **kwargs):
+    def delete_one(cls, query, **kwargs):
         '''
         物理删除
         '''
         name = cls.__name__
-        ms = mongodb[name].delete_many(query, **kwargs).raw_result
-        return ms
+        m = mongodb[name].find_one_and_delete(query, **kwargs)
+        return m and cls._new_with_bson(m)
 
     @classmethod
-    def update(cls, query, update, **kwargs):
+    def update_one(cls, query, update, **kwargs):
         name = cls.__name__
-        ms = mongodb[name].update_one(query, update, **kwargs).raw_result
-        return ms
+        m = mongodb[name].find_one_and_update(query, update, **kwargs)
+        return m and cls._new_with_bson(m)
 
     def json(self):
         """

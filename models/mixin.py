@@ -4,11 +4,11 @@ class MixinMongo(object):
         status, data, msgs = False, None, []
         m = cls.new(form)
         status = True
-        data = m
+        data = m.json()
         return status, data, msgs
 
     @classmethod
-    def mixin_delete(cls, **kwargs):
+    def mixin_delete_many(cls, **kwargs):
         status, data, msgs = False, None, []
         ms = cls.find(**kwargs)
         for m in ms:
@@ -31,14 +31,14 @@ class MixinMongo(object):
         m = cls.find_one(**kwargs)
         if m is not None:
             status = True
-            data = m
+            data = m.json()
         else:
             msgs.append('没有此项')
         return status, data, msgs
 
     @classmethod
     def mixin_update(cls, model_id, form):
-        status, data, msgs = False, {}, []
+        status, data, msgs = False, None, []
         query = {
             'id': model_id,
         }
@@ -52,7 +52,7 @@ class MixinMongo(object):
 
     @classmethod
     def mixin_retrieve_all(cls, **kwargs):
-        status, data, msgs = False, {}, []
+        status, data, msgs = False, None, []
         ms = cls.all()
         status = True
         data = [m.json() for m in ms]
@@ -65,18 +65,24 @@ class MixinMongo(object):
 
     @classmethod
     def mixin_delete_logically(cls, query):
-        status, data, msgs = False, {}, []
-        ms = cls.delete_logically(query)
-        status = True
-        data = [m.json() for m in ms]
+        status, data, msgs = False, None, []
+        m = cls.delete_one_logically(query)
+        if m is None:
+            msgs.append('没有此项')
+        else:
+            status = True
+            data = m.json()
         return status, data, msgs
 
     @classmethod
-    def mixin_delete_physically(cls, query):
-        status, data, msgs = False, {}, []
-        ms = cls.delete_physically(query)
-        status = True
-        data = [m.json() for m in ms]
+    def mixin_delete_one(cls, query):
+        status, data, msgs = False, None, []
+        m = cls.delete_one(query)
+        if m is None:
+            msgs.append('没有此项')
+        else:
+            status = True
+            data = m.json()
         return status, data, msgs
 
 

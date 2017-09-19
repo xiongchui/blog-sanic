@@ -18,17 +18,17 @@ var templateArticle = (article) => {
     <span id="id-article-ct">
         <i class="fa fa-calendar-check-o fa-fw" aria-hidden="true"></i>
         发表于
-        {{ m.ct | formattime }}
+        <a href="#delete/{{ m.id }}">{{ m.ct | formattime }}</a>
     </span>
         <span id="id-article-ut">
         <i class="fa fa-calendar fa-fw" aria-hidden="true"></i>
         更新于
-        {{ m.ut | formattime }}
+            <a href="#edit/{{ m.id }}">{{ m.ut | formattime }}</a>
     </span>
         <span>
         <i class="fa fa-tags fa-fw" aria-hidden="true"></i>
         分类
-        <a href="#category/{{ m.category }}">{{ m.category }}</a>
+        <a href="/category/{{ m.category }}">{{ m.category }}</a>
     </span>
     </div>
 </header>
@@ -174,11 +174,35 @@ var initSpa = () => {
     container.innerHTML = ''
 }
 
+var deleteArticle = (id) => {
+    var req = {
+        method: 'get',
+        url: `/api/articles/delete/${id}`
+    }
+    api.ajax(req).then(body => {
+        var r = JSON.parse(body)
+        if (r.success) {
+            alertify.success('this article has been deleted successfully')
+            loadArticles()
+            location.href = '#category/all'
+        } else {
+            alertify.error(r.msgs.join(''))
+        }
+    })
+}
+
+var updateArticle = (id) => {
+
+}
+
+
 var changeArticle = (hash) => {
     var [func, subHash] = hash !== undefined ? hash.split('/') : [undefined, undefined]
     var dic = {
         'category': initArticles,
         'detail': initArticle,
+        'delete': deleteArticle,
+        'update': updateArticle,
     }
     var f = dic[func] || initArticles
     f(subHash)
@@ -187,7 +211,7 @@ var changeArticle = (hash) => {
 var bindEventHashChange = () => {
     window.addEventListener('hashchange', (e) => {
         var [url, hash] = e.newURL.split('#')
-        var flag = url.endsWith('/articles')
+        var flag = url.endsWith('/manage')
         if (flag) {
             changeArticle(hash)
         }

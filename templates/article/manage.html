@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="../../static/article/css/articles.css">
     <link rel="stylesheet" href="../../static/article/css/detail.css">
     <link href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/alertifyjs-alertify.js/1.0.11/css/alertify.css" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
@@ -15,10 +16,11 @@
 {% block script %}
     {{ super() }}
     <!-- js file -->
+    <script src="https://cdn.bootcss.com/alertifyjs-alertify.js/1.0.11/js/alertify.js"></script>
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
     <script src="https://cdn.bootcss.com/remarkable/1.7.1/remarkable.min.js"></script>
     <script src="https://cdn.bootcss.com/nunjucks/3.0.0/nunjucks.js"></script>
-    <script src="../../static/js/iv-md.js"></script>
-    <script src="../../static/article/js/spa-detail.js"></script>
-    <script src="../../static/article/js/articles.js"></script>
+    <script src="/static/js/iv-md.js"></script>
+    <script src="/static/article/js/manage-detail.js"></script>
+    <script src="/static/article/js/articles.js"></script>
 {% endblock %}

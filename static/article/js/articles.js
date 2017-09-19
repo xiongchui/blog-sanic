@@ -37,7 +37,7 @@ var loadArticles = () => {
             localStorage.articles = body
             var hash = location.hash.slice(1)
             changeArticle(hash)
-            alertify.success('load all articles succeeded')
+            alertify.success('load all articles successfully')
         } else {
             alertify.error(msgs.join(''))
         }
@@ -50,7 +50,11 @@ var loadArticlesByHash = (subHash) => {
     var d = JSON.parse(body)
     if (arr.includes(subHash)) {
         d = d.filter(e => e.category === subHash)
-        alertify.success(`load category ${subHash} succeeded`)
+        if (d.length > 0) {
+            alertify.success(`load category ${subHash} successfully`)
+        } else {
+            alertify.error(`${subHash} category has no articles`)
+        }
     } else {
         if (subHash !== undefined && subHash !== 'all') {
             alertify.error(`no ${subHash} category and load all articles`)
@@ -93,30 +97,9 @@ var initArticles = (hash) => {
     loadArticlesByHash(hash)
 }
 
-var bindEventChangeArticles = () => {
-    window.addEventListener('hashchange', (e) => {
-        var [url, hash] = e.newURL.split('#')
-        var flag = url.endsWith('/articles')
-        if (flag) {
-            changeArticle(hash)
-        }
-
-    })
-}
-
-var changeArticle = (hash) => {
-    var [func, name] = hash !== undefined ? hash.split('/') : [undefined, undefined]
-    var dic = {
-        'category': initArticles,
-        'detail': initArticle,
-    }
-    var f = dic[func] || initArticles
-    f(name)
-}
-
 var __main = () => {
     loadArticles()
-    bindEventChangeArticles()
+    bindEventHashChange()
 }
 
 __main()
