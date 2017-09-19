@@ -4,7 +4,7 @@ class MixinMongo(object):
         status, data, msgs = False, None, []
         m = cls.new(form)
         status = True
-        data = m.json()
+        data = m
         return status, data, msgs
 
     @classmethod
@@ -14,7 +14,7 @@ class MixinMongo(object):
         for m in ms:
             m.delete()
         status = True
-        data = [m.json() for m in ms]
+        data = ms
         return status, data, msgs
 
     @classmethod
@@ -22,7 +22,7 @@ class MixinMongo(object):
         status, data, msgs = False, None, []
         ms = cls.all()
         status = True
-        data = [m.json() for m in ms]
+        data = ms
         return status, data, msgs
 
     @classmethod
@@ -31,7 +31,7 @@ class MixinMongo(object):
         m = cls.find_one(**kwargs)
         if m is not None:
             status = True
-            data = m.json()
+            data = m
         else:
             msgs.append('没有此项')
         return status, data, msgs
@@ -45,7 +45,7 @@ class MixinMongo(object):
         m = cls.update_one(query, form)
         if m is not None:
             status = True
-            data = m.json()
+            data = m
         else:
             msgs.append('更新失败')
         return status, data, msgs
@@ -55,7 +55,7 @@ class MixinMongo(object):
         status, data, msgs = False, None, []
         ms = cls.all()
         status = True
-        data = [m.json() for m in ms]
+        data = ms
         return status, data, msgs
 
     def __repr__(self):
@@ -71,7 +71,7 @@ class MixinMongo(object):
             msgs.append('没有此项')
         else:
             status = True
-            data = m.json()
+            data = m
         return status, data, msgs
 
     @classmethod
@@ -82,7 +82,7 @@ class MixinMongo(object):
             msgs.append('没有此项')
         else:
             status = True
-            data = m.json()
+            data = m
         return status, data, msgs
 
 

@@ -34,6 +34,7 @@ class Comment(Mongua, MixinMongo):
         return r
 
 
+
 def create_comment():
     form = dict(
         user_id=1,

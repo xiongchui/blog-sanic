@@ -42,3 +42,14 @@ class Article(Mongua, MixinMongo):
         if m is not None:
             Comment.delete_many({'article_id': m.id})
         return m
+
+    @classmethod
+    def find_one(cls, **kwargs):
+        m = super().find_one(**kwargs)
+        return m and m.json()
+
+    @classmethod
+    def all(cls):
+        ms = super().all()
+        ms = [m.json() for m in ms]
+        return ms

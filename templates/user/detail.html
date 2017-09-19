@@ -10,8 +10,8 @@
 
 {% block body %}
     <div>用户名：{{ m.username }} </div>
-    {% if m.mailbox %}
-        {% set mail = m.mailbox %}
+    {% if m.email %}
+        {% set mail = m.email %}
     {% else %}
         {% set mail = '未设置' %}
     {% endif %}
