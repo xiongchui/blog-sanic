@@ -84,9 +84,9 @@ var loadArticleById = (id) => {
         var r = article
         changeTitle(r)
         insertArticle(r)
-        insertCommentInput(id)
-        loadComment(r)
-        bindEventAddComment()
+        // insertCommentInput(id)
+        // loadComment(r)
+        // bindEventAddComment()
         alertify.success(`load current article succeeded`)
     } else {
         history.back()
