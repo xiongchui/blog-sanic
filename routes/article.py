@@ -21,5 +21,6 @@ async def new(request):
 
 
 @bp.route('/manage')
+@login_required
 async def index(request):
     return template('article/manage.html')

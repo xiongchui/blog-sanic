@@ -89,6 +89,7 @@ var loadArticleById = (id) => {
         // bindEventAddComment()
         alertify.success(`load current article succeeded`)
     } else {
+        alertify.error('没有这篇文章 跳转至上一页')
         history.back()
     }
 }

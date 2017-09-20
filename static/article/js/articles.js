@@ -56,7 +56,8 @@ var loadArticlesByHash = (subHash) => {
             alertify.error(`${subHash} category has no articles`)
         }
     } else {
-        if (subHash !== undefined && subHash !== 'all') {
+        var exs = [undefined, 'all']
+        if (!exs.includes(subHash)) {
             alertify.error(`no ${subHash} category and load all articles`)
         }
     }
