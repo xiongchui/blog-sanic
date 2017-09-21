@@ -1,0 +1,9 @@
+proc_name = 'blog-sanic'
+bind = "unix:/tmp/{}.sock".format(proc_name)
+workers = 2
+worker_class = 'sanic.worker.GunicornWorker'
+pidfile = "/tmp/{}.pid".format(proc_name)
+accesslog = "/tmp/{}-access.log".format(proc_name)
+errorlog = "/tmp/{}-err.log".format(proc_name)
+loglevel = 'debug'
+access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'

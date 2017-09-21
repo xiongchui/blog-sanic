@@ -6,8 +6,7 @@ from sanic.exceptions import abort
 from sanic.response import html, json
 
 # jinjia2 config
-env = Environment(
-    loader=PackageLoader(__name__, '../templates'))
+env = Environment(loader=PackageLoader(__name__, '../templates'))
 
 
 def template(path, **kwargs):
