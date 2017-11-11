@@ -1,14 +1,14 @@
-var changeTitle = (article) => {
-    var title = '半夜集 - ' + article.title
+const changeTitle = (article) => {
+    const title = '半夜集 - ' + article.title
     document.title = title
 }
 
-var htmlFromMarkdown = (markdown) => {
+const htmlFromMarkdown = (markdown) => {
     var s = md.render(markdown)
     return s
 }
 
-var templateArticle = (article) => {
+const templateArticle = (article) => {
     var m = article
     var s = `<header>
     <h1 id="id-article-title">
@@ -46,18 +46,7 @@ var templateArticle = (article) => {
     return r
 }
 
-var insertCommentInput = (articleId) => {
-    var s = `<div>
-    <input id="id-input-content" data-id="${articleId}" type="text" name="content">
-    <button id="id-btn-add" type="submit">add comment</button>
-</div>
-<div id="id-comment-content">
-</div>`
-    var container = _e('#id-comment-container')
-    container.insertAdjacentHTML('afterbegin', s)
-}
-
-var insertArticle = (article) => {
+const insertArticle = (article) => {
     var r = article
     r.content = htmlFromMarkdown(r.content)
     var s = templateArticle(r)
@@ -65,16 +54,7 @@ var insertArticle = (article) => {
     container.insertAdjacentHTML('afterbegin', s)
 }
 
-var loadComment = (r) => {
-    ms = r.comments
-    var container = _e('#id-comment-content')
-    ms.forEach(m => {
-        var s = templateComment(m)
-        container.insertAdjacentHTML('beforeend', s)
-    })
-}
-
-var loadArticleById = (id) => {
+const loadArticleById = (id) => {
     var container = _e('#id-article-container')
     id = Number(id)
     var body = localStorage.articles
@@ -94,7 +74,7 @@ var loadArticleById = (id) => {
     }
 }
 
-var templateContainerArticle = () => {
+const templateContainerArticle = () => {
     var s = `<div id="id-article-container" class="fadeIn slideDown">
     <article>
     </article>
@@ -114,68 +94,24 @@ api.addComment = (form, callback) => {
     })
 }
 
-var insertComment = (article) => {
-    var s = templateComment(article)
-    var container = _e('#id-comment-content')
-    container.insertAdjacentHTML('beforeend', s)
-}
-
-var templateComment = (m) => {
-    var s = `<div>
-        {{ m.user.username }}
-    </div>
-    <div>
-        {{ m.ct | formattime}}
-    </div>
-    <div>
-        {{ m.content }}
-    </div>`
-    var env = nunjucksEnvironment()
-    var r = env.renderString(s, {
-        m,
-    })
-    return r
-}
-
-var bindEventAddComment = () => {
-    var btn = _e('#id-btn-add')
-    btn.addEventListener('click', event => {
-        var input = _e('#id-input-content')
-        var form = {
-            content: input.value,
-            article_id: input.dataset.id,
-        }
-        api.addComment(form, body => {
-            var r = JSON.parse(body)
-            if (r.success) {
-                var data = r.data
-                insertComment(data)
-                alertify.success('add comment succeeded')
-            } else {
-                alertify.error(r.msgs.join(''))
-            }
-        })
-    })
-}
-
-var initEnvDetail = () => {
+const initEnvDetail = () => {
     var spa = _e('#id-spa')
     var s = templateContainerArticle()
     spa.insertAdjacentHTML('beforeend', s)
 }
 
-var initArticle = (hash) => {
+const initArticle = (hash) => {
     initSpa()
     initEnvDetail()
     loadArticleById(hash)
 }
 
-var initSpa = () => {
+const initSpa = () => {
     var container = _e('#id-spa')
     container.innerHTML = ''
 }
 
-var changeArticle = (hash) => {
+const changeArticle = (hash) => {
     var [func, subHash] = hash !== undefined ? hash.split('/') : [undefined, undefined]
     var dic = {
         'category': initArticles,
@@ -185,7 +121,7 @@ var changeArticle = (hash) => {
     f(subHash)
 }
 
-var bindEventHashChange = () => {
+const bindEventHashChange = () => {
     window.addEventListener('hashchange', (e) => {
         var [url, hash] = e.newURL.split('#')
         var flag = url.endsWith('/articles')
@@ -194,3 +130,110 @@ var bindEventHashChange = () => {
         }
     })
 }
+
+const templateCellArticle = () => {
+    var s = `<article id="id-article-{{ t.id }}" class="article-cell">
+    <div class="article-title">
+        <a class="article-link" href="#detail/{{ t.id }}">{{ t.title }}</a>
+    </div>
+    <div class="article-info">
+        <span><i class="fa fa-calendar-check-o fa-fw" aria-hidden="true"></i>{{ t.ct | formattime }}</span>
+        <span><i class="fa fa-calendar fa-fw" aria-hidden="true"></i>{{ t.ut | formattime }}</span>
+        <span><i class="fa fa-tags fa-fw" aria-hidden="true"></i><a href="#category/{{ t.category }}">{{ t.category }}</a></span>
+    </div>
+    <div class="article-overview">{{ t.overview }}</div>
+    <div class="article-detail"><a href="#detail/{{ t.id }}">阅读全文</a></div>
+</article>`
+    return s
+}
+
+const nunjucksEnvironment = () => {
+    // setup nunjucks
+    var env = new nunjucks.Environment()
+    env.addFilter('formattime', time => {
+        var d = new Date(time * 1000)
+        var year = d.getFullYear()
+        var month = d.getMonth() + 1
+        var date = d.getDate()
+        return `${month}/${date}/${year}`
+    })
+    return env
+}
+
+// 自动获取数据并生成页面
+const loadArticles = () => {
+    const source = '/api/articles'
+    api.get(source, body => {
+        var res = JSON.parse(body)
+        if (res.success) {
+            var body = JSON.stringify(res.data)
+            localStorage.articles = body
+            var hash = location.hash.slice(1)
+            changeArticle(hash)
+            alertify.success('load all articles successfully')
+        } else {
+            alertify.error(msgs.join(''))
+        }
+    })
+}
+
+const loadArticlesByHash = (subHash) => {
+    var body = localStorage.articles
+    var arr = ['javascript', 'python', 'mind']
+    var d = JSON.parse(body)
+    if (arr.includes(subHash)) {
+        d = d.filter(e => e.category === subHash)
+        if (d.length > 0) {
+            alertify.success(`load category ${subHash} successfully`)
+        } else {
+            alertify.error(`${subHash} category has no articles`)
+        }
+    } else {
+        var exs = [undefined, 'all']
+        if (!exs.includes(subHash)) {
+            alertify.error(`no ${subHash} category and load all articles`)
+        }
+    }
+    insertArticles(d)
+}
+
+const insertArticles = (articles) => {
+    var env = nunjucksEnvironment()
+    var container = _e('#id-articles-container')
+    const template = templateCellArticle()
+    const key = 't'
+    let cells = []
+    articles.forEach(m => {
+        let args = {}
+        args[key] = m
+        let s = env.renderString(template, args)
+        cells.push(s)
+    })
+    container.innerHTML = cells.join('')
+}
+
+const templateContainerArticles = () => {
+    var s = `<div id="id-articles-container"
+     class="fadeIn slideDown">
+</div>`
+    return s
+}
+
+const initEnvArticles = () => {
+    var spa = _e('#id-spa')
+    var s = templateContainerArticles()
+    spa.insertAdjacentHTML('beforeend', s)
+}
+
+const initArticles = (hash) => {
+    initSpa()
+    initEnvArticles()
+    loadArticlesByHash(hash)
+}
+
+const __main = () => {
+    loadArticles()
+    bindEventHashChange()
+}
+
+__main()

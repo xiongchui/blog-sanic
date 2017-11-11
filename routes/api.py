@@ -16,14 +16,14 @@ async def all(request):
 @bp.route('/articles/<id:int>', methods=['GET'])
 async def detail(request, id):
     status, data, msgs = Article.mixin_retrieve(id=id)
-    return jsonResponse(status, data.json(), msgs)
+    return jsonResponse(status, data, msgs)
 
 
 @bp.route('/articles/delete/<id:int>', methods=['GET'])
 @login_required
 async def delete(request, id):
     status, data, msgs = Article.mixin_delete_one(dict(id=id))
-    return jsonResponse(status, data.json(), msgs)
+    return jsonResponse(status, data, msgs)
 
 
 @bp.route('/articles/new', methods=['POST'])

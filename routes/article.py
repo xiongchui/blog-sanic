@@ -9,11 +9,6 @@ async def index(request):
     return template('article/index.html')
 
 
-@bp.route('/<id:int>', methods=['GET'])
-async def detail(request, id):
-    return template('article/detail.html', id=id)
-
-
 @bp.route('/manage/new', methods=['GET'])
 @login_required
 async def new(request):

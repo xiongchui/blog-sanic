@@ -4,10 +4,6 @@
     用户详情
 {% endblock %}
 
-{% block sytle %}
-    {{ super() }}
-{% endblock %}
-
 {% block body %}
     <div>用户名：{{ m.username }} </div>
     {% if m.email %}
@@ -18,5 +14,3 @@
     <div>邮箱：{{ mail }}</div>
 {% endblock %}
 
-{% block script %}
-{% endblock %}
