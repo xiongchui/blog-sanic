@@ -1,13 +1,22 @@
-const nunjucksEnvironment = () => {
-    const env = new nunjucks.Environment()
-    env.addFilter('formattime', time => {
-        var d = new Date(time * 1000)
-        var year = d.getFullYear()
-        var month = d.getMonth() + 1
-        var date = d.getDate()
-        return `${month}/${date}/${year}`
-    })
-    return env
+class NunjucksEnv {
+    constructor() {
+        const env = new nunjucks.Environment()
+        env.addFilter('formattime', time => {
+            var d = new Date(time * 1000)
+            var year = d.getFullYear()
+            var month = d.getMonth() + 1
+            var date = d.getDate()
+            return `${month}/${date}/${year}`
+        })
+        return env
+    }
+
+    static single() {
+        if (this._instance === undefined) {
+            this._instance = new this()
+        }
+        return this._instance
+    }
 }
 
 class ApiArticle extends Api {
@@ -31,7 +40,9 @@ class AppBlog {
     }
 
     render() {
-        this.changeView('category/all')
+        const hash = location.hash
+        const s = hash === '' ? 'category/all' : hash.slice(1)
+        this.changeView(s)
     }
 
     bindEvent() {
@@ -72,13 +83,20 @@ class ViewArticle extends Component {
     constructor(props, hash) {
         super(props)
         this.hash = hash
-        this.render()
+        this.nunjucks = NunjucksEnv.single()
+        this.initEnv()
         this.categories = ['javascript', 'python', 'mind']
         this.renderByCategory()
     }
 
-    render() {
-        const s = this.templateContainer()
+    initEnv() {
+        const s = `
+    <div id="id-article-container" class="fadeIn slideDown">
+        <article>
+        </article>
+        <div id="id-comment-container">
+        </div>
+    </div>`
         this.wrapper.innerHTML = s
     }
 
@@ -93,8 +111,7 @@ class ViewArticle extends Component {
             arr = arr.filter(e => e.category === this.category())
             alertify.success(`load category ${this.category()} successfully`)
         }
-        log('arr', arr)
-        const env = nunjucksEnvironment()
+        const env = this.nunjucks
         const template = this.templateCell()
         const key = 't'
         const cells = arr.map(m => {
@@ -103,7 +120,6 @@ class ViewArticle extends Component {
             const s = env.renderString(template, args)
             return s
         })
-        log('wrapper', this.wrapper)
         const div = this.wrapper._e('#id-article-container')
         div.innerHTML = cells.join('\n')
     }
@@ -117,22 +133,9 @@ class ViewArticle extends Component {
             p.then(body => {
                 const r = JSON.parse(body)
                 let arr = r.data
-
                 this._renderCells(arr)
             })
         }
-
-    }
-
-    templateContainer() {
-        const s = `
-    <div id="id-article-container" class="fadeIn slideDown">
-        <article>
-        </article>
-        <div id="id-comment-container">
-        </div>
-    </div>`
-        return s
     }
 
     templateCell() {
@@ -157,6 +160,7 @@ class ViewDetail extends Component {
         super(props)
         this.hash = hash
         this.id = this.idByHash(hash)
+        this.nunjucks = NunjucksEnv.single()
         this.initEnv()
         this.render()
     }
@@ -177,7 +181,22 @@ class ViewDetail extends Component {
     }
 
     render() {
-        const ms = this.model.records
+        let arr = this.model.all()
+        if (arr !== undefined) {
+            this.renderArticle(arr)
+        } else {
+            const p = this.model.fetchAll()
+            p.then(body => {
+                const r = JSON.parse(body)
+                let arr = r.data
+                this.renderArticle(arr)
+            })
+        }
+
+    }
+
+    renderArticle(articles) {
+        const ms = articles
         const m = ms.find(e => e.id === this.id)
         if (m !== undefined) {
             this.changeTitle(m)
@@ -237,7 +256,7 @@ class ViewDetail extends Component {
     <div id="id-article-content">
         {{ m.content | safe }}
     </div>`
-        var env = nunjucksEnvironment()
+        var env = this.nunjucks
         var r = env.renderString(s, {
             m,
         })

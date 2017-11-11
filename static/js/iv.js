@@ -129,14 +129,10 @@ class Component extends PubSub {
     constructor(props) {
         super()
         this._props = props
-        this.model = props.model
-        this.api = props.api
-        this.wrapper = props.wrapper
-        this.setup()
-    }
-
-    setup() {
-
+        this.attrs = ['api', 'wrapper', 'model']
+        for (let k of this.attrs) {
+            this[k] = props[k]
+        }
     }
 
     destroy() {
