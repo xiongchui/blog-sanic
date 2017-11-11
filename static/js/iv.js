@@ -30,97 +30,6 @@ Element.prototype._es = function (sel) {
 
 Element.prototype.on = Element.prototype.addEventListener
 
-
-// 封装绑定事件函数
-const bindEvent = (element, eventName, callback) => {
-    element.addEventListener(eventName, callback)
-}
-
-const bindEventDelegate = (element, eventName, callback, responseClass) => {
-    element.addEventListener(eventName, event => {
-        var self = event.target
-        if (self.classList.contains(responseClass)) {
-            callback(event)
-        }
-    })
-}
-
-const bindAll = (selector, eventName, callback, responseClass) => {
-    var es = document.querySelectorAll(selector)
-    var func = responseClass === undefined ? bindEvent : bindEventDelegate
-    for (let e of es) {
-        func(e, eventName, callback, responseClass)
-    }
-}
-
-
-// 内部 api
-const api = {}
-
-
-api.ajax = request => {
-    var req = {
-        url: request.url,
-        // data 传对象
-        data: JSON.stringify(request.data) || null,
-        method: request.method || 'POST',
-        header: request.header || {},
-        contentType: request.contentType || 'application/json',
-        callback: request.callback
-    }
-    var r = new XMLHttpRequest()
-    var promise = new Promise((resolve, reject) => {
-        r.open(req.method, req.url, true)
-        r.setRequestHeader('Content-Type', req.contentType)
-        // setHeader
-        Object.keys(req.header).forEach(key => {
-            r.setRequestHeader(key, req.header[key])
-        })
-        r.onreadystatechange = function () {
-            if (r.readyState === 4) {
-                let res = r.response
-                // 回调函数
-                if (typeof req.callback === 'function') {
-                    req.callback(res)
-                }
-                // Promise 成功
-                resolve(res)
-            }
-        }
-        r.onerror = function (err) {
-            reject(err)
-        }
-        if (req.method.toUpperCase() === 'GET') {
-            r.send()
-        } else {
-            // POST
-            r.send(req.data)
-        }
-    })
-    return promise
-}
-
-//  封装 get Ajax 请求
-api.get = function (url, callback) {
-    var r = {
-        method: 'GET',
-        url: url,
-        data: '',
-    }
-    api.ajax(r).then(callback, alert)
-}
-
-// 封装 post Ajax 请求
-api.post = function (url, form, callback) {
-    var r = {
-        method: 'POST',
-        url: url,
-        contentType: 'application/json',
-        data: JSON.stringify(form),
-    }
-    api.ajax(r).then(callback, alert)
-}
-
 class Api {
     static single() {
         if (this._instance === undefined) {
@@ -207,8 +116,10 @@ class PubSub {
     emit(...args) {
         const hs = this.handlers
         const [eventType, ...rest] = args
-        for (let callback of hs[eventType]) {
-            callback.apply(this, rest)
+        if (hs[eventType] !== undefined) {
+            for (let callback of hs[eventType]) {
+                callback.apply(this, rest)
+            }
         }
         return this
     }
@@ -228,4 +139,21 @@ class Component extends PubSub {
 
     }
 
+    destroy() {
+        this.wrapper.innerHTML = ''
+        delete this
+    }
+}
+
+class Model extends PubSub {
+    constructor() {
+        super()
+    }
+
+    static single() {
+        if (this._instance === undefined) {
+            this._instance = new this()
+        }
+        return this._instance
+    }
 }
