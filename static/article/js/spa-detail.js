@@ -29,6 +29,11 @@ class ApiArticle extends Api {
         const url = this.path + '/articles'
         return this.get(url, callback)
     }
+
+    allSync() {
+        const url = this.path + '/articles'
+        return this.getSync(url)
+    }
 }
 
 class AppBlog {
@@ -126,16 +131,7 @@ class ViewArticle extends Component {
 
     renderByCategory() {
         let arr = this.model.all()
-        if (arr !== undefined) {
-            this._renderCells(arr)
-        } else {
-            const p = this.model.fetchAll()
-            p.then(body => {
-                const r = JSON.parse(body)
-                let arr = r.data
-                this._renderCells(arr)
-            })
-        }
+        this._renderCells(arr)
     }
 
     templateCell() {
@@ -181,18 +177,8 @@ class ViewDetail extends Component {
     }
 
     render() {
-        let arr = this.model.all()
-        if (arr !== undefined) {
-            this.renderArticle(arr)
-        } else {
-            const p = this.model.fetchAll()
-            p.then(body => {
-                const r = JSON.parse(body)
-                let arr = r.data
-                this.renderArticle(arr)
-            })
-        }
-
+        const arr = this.model.all()
+        this.renderArticle(arr)
     }
 
     renderArticle(articles) {
@@ -271,17 +257,11 @@ class Article extends Model {
     }
 
     all() {
+        if (this.records === undefined) {
+            const body = this.api.allSync()
+            this.records = JSON.parse(body).data
+        }
         return this.records
-    }
-
-    fetchAll() {
-        const p = this.api.all()
-        p.then(body => {
-            const r = JSON.parse(body)
-            log('r', r)
-            this.records = r.data
-        })
-        return p
     }
 }
 

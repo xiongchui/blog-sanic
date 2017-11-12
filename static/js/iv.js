@@ -52,9 +52,6 @@ class Api {
             r.open(req.method, req.url, true)
             r.setRequestHeader('Content-Type', req.contentType)
             // setHeader
-            if (request.XCSRFToken !== undefined) {
-                r.setRequestHeader('X-CSRFToken', request.XCSRFToken)
-            }
             Object.keys(req.header).forEach(key => {
                 r.setRequestHeader(key, req.header[key])
             })
@@ -97,6 +94,48 @@ class Api {
             callback: callback,
         }
         return this._ajax(req)
+    }
+
+    _ajaxSync(request) {
+        var req = {
+            url: request.url,
+            data: JSON.stringify(request.data) || null,
+            method: request.method || 'POST',
+            header: request.header || {},
+            contentType: request.contentType || 'application/json',
+        }
+        var r = new XMLHttpRequest()
+        if (request.contentType !== undefined) {
+            r.setRequestHeader('Content-Type', request.contentType)
+        }
+        Object.keys(req.header).forEach(key => {
+            r.setRequestHeader(key, req.header[key])
+        })
+        r.open(req.method, req.url, false)
+        if (request.method === 'GET') {
+            r.send()
+        } else {
+            r.send(request.data)
+        }
+        if (r.readyState === 4) {
+            return r.response
+        }
+    }
+
+    getSync(path) {
+        const req = {
+            url: path,
+            method: 'GET',
+        }
+        return this._ajaxSync(req)
+    }
+
+    postSync(path, form) {
+        const req = {
+            url: path,
+            data: form,
+        }
+        return this._ajaxSync(req)
     }
 }
 
