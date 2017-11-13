@@ -1,11 +1,3 @@
-document.addEventListener("DOMContentLoaded", () => {
-    __main()
-}, false)
-
-const __main = () => {
-    bindEvents()
-}
-
 const bindEvents = () => {
     bindEventShow()
     bindEventClickSubmit()
@@ -39,10 +31,8 @@ const bindEventClickSubmit = () => {
                 form[e.name] = e.value
             }
         })
-        api.ajax({
-            url: '/api/articles/new',
-            data: form,
-        }).then(body => {
+        const api = Api.single()
+        api.post('/api/articles/new', form).then(body => {
             var r = JSON.parse(body)
             if (r.success) {
                 var m = r.data
@@ -54,3 +44,9 @@ const bindEventClickSubmit = () => {
         })
     })
 }
+
+const __main = () => {
+    bindEvents()
+}
+
+__main()

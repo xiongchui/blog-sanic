@@ -116,7 +116,11 @@ class ViewArticle extends Component {
     }
 
     category() {
-        const [_, sub] = this.hash.split('/')
+        const hash = this.hash
+        let [_, sub] = [undefined, 'all']
+        if (hash !== undefined) {
+            sub = hash.split('/')[1]
+        }
         return sub
     }
 
@@ -233,7 +237,7 @@ class ViewDetail extends Component {
     }
 
     insertArticle(model) {
-        const m = model
+        const m = Object.create(model)
         m.content = this.htmlFromMarkdown(m.content)
         const s = this.template(m)
         const div = this.wrapper._e('article')
@@ -309,7 +313,8 @@ class ViewDetail extends Component {
             'add-comment': this.actionAddComment,
             'delete-article': this.actionDeleteArticle,
         }
-        this.wrapper.on('click', (e) => {
+        const div = this.wrapper._e('#id-article-container')
+        div.on('click', (e) => {
             const self = e.target
             const action = self.dataset.action
             log('action', action)
