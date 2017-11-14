@@ -72,15 +72,15 @@ class AppBlog {
     }
 
     changeView(hash) {
-        var [view, _] = hash !== undefined ? hash.split('/') : ['category', undefined]
-        var cls = {
+        const [view, _] = hash !== undefined ? hash.split('/') : ['category', undefined]
+        const mapView = {
             'category': ViewArticle,
             'detail': ViewDetail,
         }
         if (this.view !== undefined) {
             this.view.destroy()
         }
-        this.view = this.initView(cls[view], hash)
+        this.view = this.initView(mapView[view], hash)
         log('view', this.view)
     }
 
@@ -256,10 +256,10 @@ class ViewDetail extends Component {
             {{ m.title }}
         </h1>
         <div class="detail-info flex">
-        <span id="id-article-ct" data-id="{{ m.id }}">
+        <span id="id-article-ct" data-id="{{ m.id }}" data-action="delete-article">
             <i class="fa fa-calendar-check-o fa-fw" aria-hidden="true"></i>
             发表于
-            <a data-action="delete-article">{{ m.ct | formattime }}</a>
+            {{ m.ct | formattime }}
         </span>
             <span id="id-article-ut">
             <i class="fa fa-calendar fa-fw" aria-hidden="true"></i>
@@ -333,7 +333,7 @@ class ViewDetail extends Component {
             var r = JSON.parse(body)
             if (r.success) {
                 alertify.success('this article has been deleted successfully')
-                location.href = '/manage'
+                location.href = '/articles/manage'
             } else {
                 alertify.error(r.msgs.join(''))
             }
@@ -382,7 +382,7 @@ class Article extends Model {
     }
 }
 
-var insertArticleUpdateInput = (id) => {
+const insertArticleUpdateInput = (id) => {
     var articles = JSON.parse(localStorage.articles)
     var m = articles.find(e => e.id === id)
     var s = `<div id="id-editor-container" class="full-height">
@@ -432,7 +432,7 @@ var insertArticleUpdateInput = (id) => {
     spa.insertAdjacentHTML('afterbegin', s)
 }
 
-var bindEventClickUpdate = (id) => {
+const bindEventClickUpdate = (id) => {
     var btn = _e('#id-btn-update')
     btn.on('click', (e) => {
         var container = _e('#id-editor-container')
@@ -470,7 +470,7 @@ const bindEventsUpdate = (id) => {
 }
 
 const bindEventShow = () => {
-    d = _e('#id-editor-content')
+    const d = _e('#id-editor-content')
     d.on('keyup', () => {
         var s = d.value
         var t = htmlFromMarkdown(s)
@@ -478,14 +478,13 @@ const bindEventShow = () => {
     })
 }
 
-var updateArticle = (subHash) => {
+const updateArticle = (subHash) => {
     var id = Number(subHash)
-    initSpa()
     insertArticleUpdateInput(id)
     bindEventsUpdate(id)
 }
 
-var changeArticle = (hash) => {
+const changeArticle = (hash) => {
     var [func, subHash] = hash !== undefined ? hash.split('/') : [undefined, undefined]
     var dic = {
         'edit': updateArticle,
