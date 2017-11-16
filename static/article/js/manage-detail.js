@@ -44,6 +44,11 @@ class ApiArticle extends Api {
         const url = this.path + `/articles/delete/${articleId}`
         return this.get(url, callback)
     }
+
+    updateArticle(articleId, form, callback) {
+        const url = this.path + `/articles/update/${articleId}`
+        return this.post(url, form, callback)
+    }
 }
 
 class AppBlog {
@@ -76,6 +81,7 @@ class AppBlog {
         const mapView = {
             'category': ViewArticle,
             'detail': ViewDetail,
+            'edit': ViewUpdate,
         }
         if (this.view !== undefined) {
             this.view.destroy()
@@ -279,8 +285,8 @@ class ViewDetail extends Component {
     <div id="id-article-content">
         {{ m.content | safe }}
     </div>`
-        var env = this.nunjucks
-        var r = env.renderString(s, {
+        const env = this.nunjucks
+        const r = env.renderString(s, {
             m,
         })
         return r
@@ -367,25 +373,22 @@ class ViewDetail extends Component {
     }
 }
 
-class Article extends Model {
-    constructor() {
-        super()
-        this.api = ApiArticle.single()
+class ViewUpdate extends Component {
+    constructor(props, hash) {
+        super(props)
+        this.hash = hash
+        this.id = this.idByHash(hash)
+        this.initEnv()
+        this.bindEvents()
     }
 
-    all() {
-        if (this.records === undefined) {
-            const body = this.api.allSync()
-            this.records = JSON.parse(body).data
-        }
-        return this.records
-    }
-}
+    render() {
 
-const insertArticleUpdateInput = (id) => {
-    var articles = JSON.parse(localStorage.articles)
-    var m = articles.find(e => e.id === id)
-    var s = `<div id="id-editor-container" class="full-height">
+    }
+
+    initEnv() {
+        const m = this.model.all().find(e => e.id === this.id)
+        const s = `<div id="id-editor-container" class="full-height">
     <div>
         <div class="flex-box">
             <div class="flex-grow-1 flex-box center">
@@ -421,76 +424,111 @@ const insertArticleUpdateInput = (id) => {
         </div>
     </div>
     <div>
-        <button id="id-btn-update">update</button>
+        <button id="id-btn-update" data-action="update-article">update</button>
     </div>
     <div class="flex-box full-height">
-        <textarea id="id-editor-content" class="source article-info flex-grow-1 half-width full-height" name="content">${m.content}</textarea>
-        <div id="id-editor-show" class="flex-grow-1 half-width result-html full-height">${htmlFromMarkdown(m.content)}</div>
+        <textarea id="id-editor-content" class="source article-info flex-grow-1 half-width full-height" name="content" data-action="show-content">${m.content}</textarea>
+        <div id="id-editor-show" class="flex-grow-1 half-width result-html full-height">${this._htmlFromMarkdown(m.content)}</div>
     </div>
 </div>`
-    var spa = _e('#id-spa')
-    spa.insertAdjacentHTML('afterbegin', s)
-}
+        this.wrapper.innerHTML = s
+    }
 
-const bindEventClickUpdate = (id) => {
-    var btn = _e('#id-btn-update')
-    btn.on('click', (e) => {
-        var container = _e('#id-editor-container')
-        var es = container._es('.article-info')
-        var form = {}
+    template() {
+
+    }
+
+    idByHash(hash) {
+        const [_, id] = hash.split('/')
+        return parseInt(id)
+    }
+
+    bindEvents() {
+        const mapEvent = {
+            'click': {
+                'update-article': this.actionUpdate,
+            },
+            'keyup': {
+                'show-content': this.actionShowContent,
+            }
+        }
+        const div = this.wrapper._e('#id-editor-container')
+        Object.keys(mapEvent).forEach(key => {
+            div.on(key, (e) => {
+                const self = e.target
+                const action = self.dataset.action
+                const fn = mapEvent[key][action]
+                if (fn !== undefined) {
+                    fn.call(this, e)
+                }
+            })
+        })
+    }
+
+    actionUpdate(event) {
+        const self = event.target
+        const div = this.wrapper._e('#id-editor-container')
+        const es = div._es('.article-info')
+        const form = {}
         es.forEach(e => {
             if (e.type === 'radio') {
-                if (e.checked === true) {
+                if (e.checked) {
                     form[e.name] = e.value
                 }
             } else {
                 form[e.name] = e.value
             }
         })
-        api.ajax({
-            url: `/api/articles/update/${id}`,
-            data: form,
-        }).then(body => {
-            var r = JSON.parse(body)
+        const p = this.api.updateArticle(this.id, form)
+        p.then(body => {
+            const r = JSON.parse(body)
             if (r.success) {
-                var m = r.data
-                alertify.success('add article succeeded')
-                loadArticles()
+                const m = r.data
+                alertify.success('update article succeeded')
+                this.model.update(this.id, m)
                 location.hash = `#detail/${m.id}`
             } else {
                 alertify.error(r.msgs.join('\n'))
             }
         })
-    })
-}
-
-const bindEventsUpdate = (id) => {
-    bindEventShow()
-    bindEventClickUpdate(id)
-}
-
-const bindEventShow = () => {
-    const d = _e('#id-editor-content')
-    d.on('keyup', () => {
-        var s = d.value
-        var t = htmlFromMarkdown(s)
-        _e('#id-editor-show').innerHTML = t
-    })
-}
-
-const updateArticle = (subHash) => {
-    var id = Number(subHash)
-    insertArticleUpdateInput(id)
-    bindEventsUpdate(id)
-}
-
-const changeArticle = (hash) => {
-    var [func, subHash] = hash !== undefined ? hash.split('/') : [undefined, undefined]
-    var dic = {
-        'edit': updateArticle,
     }
-    var f = dic[func] || initArticles
-    f(subHash)
+
+    actionShowContent(event) {
+        const self = event.target
+        const v = self.value
+        const html = this._htmlFromMarkdown(v)
+        this.wrapper._e('#id-editor-show').innerHTML = html
+    }
+
+    _htmlFromMarkdown(string) {
+        var s = md.render(string)
+        return s
+    }
+}
+
+class Article extends Model {
+    constructor() {
+        super()
+        this.api = ApiArticle.single()
+        this.attrs = ['content', 'category', 'title', 'overview']
+    }
+
+    all() {
+        if (this.records === undefined) {
+            const body = this.api.allSync()
+            this.records = JSON.parse(body).data
+        }
+        return this.records
+    }
+
+    update(id, form) {
+        const m = this.records.find(e => e.id === id)
+        if (m !== undefined) {
+            this.attrs.forEach(k => {
+                m[k] = form[k]
+            })
+        }
+    }
 }
 
 const initApp = () => {

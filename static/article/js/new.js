@@ -107,7 +107,7 @@ class AppNew extends Component {
             },
             'click': {
                 'add-article': this.actionAddArticle,
-            }
+            },
         }
         const div = this.wrapper._e('#id-editor-container')
         Object.keys(mapEvent).forEach(key => {
@@ -141,7 +141,7 @@ class AppNew extends Component {
         const form = {}
         es.forEach(e => {
             if (e.type === 'radio') {
-                if (e.checked === true) {
+                if (e.checked) {
                     form[e.name] = e.value
                 }
             } else {

@@ -228,7 +228,7 @@ class Mongua(object):
         dic = {
             '$set': update,
         }
-        m = mongodb[name].find_one_and_update(query, dic, return_document=ReturnDocument.BEFORE, **kwargs)
+        m = mongodb[name].find_one_and_update(query, dic, return_document=ReturnDocument.AFTER, **kwargs)
         return m and cls._new_with_bson(m)
 
     @classmethod
