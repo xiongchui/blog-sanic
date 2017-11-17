@@ -19,7 +19,7 @@ class AppUser extends Component {
     constructor(props) {
         super(props)
         this.render()
-        this.bindEventClick()
+        this.bindEvents()
     }
 
     render() {
@@ -29,48 +29,54 @@ class AppUser extends Component {
 
     template() {
         const s = `
-        <div class="user-container">
-            <label for="id-register-username">
-                用户名
-                <input id="id-register-username" class="user-info" type="text" name="username">
-            </label>
-            <label for="id-register-email">
-                邮箱
-                <input class="user-info" type="email" name="email">
-            </label>
-            <label for="id-register-password">
-                密码
-                <input id="id-register-password" class="user-info" type="password" name="password">
-            </label>
-            <button type="submit" data-action="user-register">register</button>
-        </div>
-        <div class="user-container">
-            <label id="id-register-email" for="id-login-username">
-                用户名
-                <input class="user-info" type="text" name="username">
-            </label>
-            <label for="id-login-username">
-                密码
-                <input class="user-info" type="password" name="password">
-            </label>
-            <button type="submit" data-action="user-login">login</button>
+        <div id="id-user-container"> 
+            <div class="user-container">
+                <label for="id-register-username">
+                    用户名
+                    <input id="id-register-username" class="user-info" type="text" name="username">
+                </label>
+                <label for="id-register-email">
+                    邮箱
+                    <input class="user-info" type="email" name="email">
+                </label>
+                <label for="id-register-password">
+                    密码
+                    <input id="id-register-password" class="user-info" type="password" name="password">
+                </label>
+                <button type="submit" data-action="user-register">register</button>
+            </div>
+            <div class="user-container">
+                <label id="id-register-email" for="id-login-username">
+                    用户名
+                    <input class="user-info" type="text" name="username">
+                </label>
+                <label for="id-login-username">
+                    密码
+                    <input class="user-info" type="password" name="password">
+                </label>
+                <button type="submit" data-action="user-login">login</button>
+            </div>
         </div>`
         return s
     }
 
-    bindEventClick() {
-        const mapAction = {
-            'user-login': this.actionLogin,
-            'user-register': this.actionRegister,
+    bindEvents() {
+        const mapEvent = {
+            'click': {
+                'user-login': this.actionLogin,
+                'user-register': this.actionRegister,
+            },
         }
-        this.wrapper.on('click', (e) => {
-            const self = e.target
-            const action = self.dataset.action
-            log('action', action)
-            const fn = mapAction[action]
-            if (fn !== undefined) {
-                fn.call(this, e)
-            }
+        const div = this.wrapper._e('#id-user-container')
+        Object.keys(mapEvent).forEach(key => {
+            div.on(key, (e) => {
+                const self = e.target
+                const action = self.dataset.action
+                const fn = mapEvent[key][action]
+                if (fn !== undefined) {
+                    fn.call(this, e)
+                }
+            })
         })
     }
 

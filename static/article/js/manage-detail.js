@@ -317,23 +317,22 @@ class ViewDetail extends Component {
     }
 
     bindEvents() {
-        this.bindEventClick()
-    }
-
-    bindEventClick() {
-        const mapAction = {
-            'add-comment': this.actionAddComment,
-            'delete-article': this.actionDeleteArticle,
+        const mapEvent = {
+            'click': {
+                'add-comment': this.actionAddComment,
+                'delete-article': this.actionDeleteArticle,
+            },
         }
         const div = this.wrapper._e('#id-article-container')
-        div.on('click', (e) => {
-            const self = e.target
-            const action = self.dataset.action
-            log('action', action)
-            const fn = mapAction[action]
-            if (fn !== undefined) {
-                fn.call(this, e)
-            }
+        Object.keys(mapEvent).forEach(key => {
+            div.on(key, (e) => {
+                const self = e.target
+                const action = self.dataset.action
+                const fn = mapEvent[key][action]
+                if (fn !== undefined) {
+                    fn.call(this, e)
+                }
+            })
         })
     }
 
@@ -621,6 +620,7 @@ class ViewAdd extends Component {
             if (r.success) {
                 var m = r.data
                 alertify.success('add article succeeded')
+                this.model.add(m)
                 location.href = `/articles/manage#detail/${m.id}`
             } else {
                 alertify.error(r.msgs.join('\n'))
@@ -651,6 +651,13 @@ class Article extends Model {
                 m[k] = form[k]
             })
         }
+    }
+
+    add(form) {
+        if (this.records === undefined) {
+            this.all()
+        }
+        this.records.push(form)
     }
 }
 
